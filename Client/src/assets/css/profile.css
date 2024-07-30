@@ -174,7 +174,7 @@ gap: 1.7rem;
 .bio-user-job{
     color: var(--p-gray-light-medium);
 }
-.profile-posts-body .profile-box , .explore-box{
+.profile-posts-body .profile-box .box-in, .explore-box{
    position: relative;
 }
 .post-stat{

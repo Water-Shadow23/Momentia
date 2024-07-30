@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { UseOverlay } from "../../../hooks/useOverlay.jsx";
+import Comments from "../../Comments/Comments.jsx";
 
 export default function ProfilePostsBody() {
 
-
+    const {OpenOverlay} = UseOverlay();
+ 
     return (
         <div className="profile-posts-cont">
 
@@ -88,6 +91,9 @@ function ProfilePost({ id }) {
 
     return (
         <Link to="/" className="profile-box">
+            <div className="box-in"
+            //onClick={}
+            >
             <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
             
             <div className="profile-post-stats">
@@ -99,6 +105,7 @@ function ProfilePost({ id }) {
                     <i className="fa-regular fa-comment"></i>
                     65
                 </div>
+            </div>
             </div>
         </Link>
     )
