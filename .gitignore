@@ -1,0 +1,21 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+
+node_modules
+dist
+dist-ssr
+
+*.local
+*.vscode
+
+.vscode/*
+!.vscode/extensions.json
+
+*.idea
+
+*.env
+*.todo
+home.html

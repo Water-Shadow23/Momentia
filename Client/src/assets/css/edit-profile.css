@@ -1,0 +1,188 @@
+:root{
+    --main-bg-cl-bl:hsl(0, 0%, 0%);
+    --main-bg-cl-wt:hsl(0, 0%, 100%);
+
+    --clr-aqua-blue:hsl(207, 60%, 77%);
+    --clr-medium-blue:hsla(204, 95%, 50%, 0.955);
+    --clr-medium-dark-blue:hsla(204, 79%, 47%, 0.955);
+    --clr-medium-d-dark-blue:hsl(204, 79%, 41%);
+    
+    --bg-gray-black:hsl(0, 0%, 7.9%);
+    --bg-gray-medium:hsl(0, 0%, 21%);
+    --p-gray-black:hsl(0, 0%, 15%);
+    --p-gray:hsl(0,0%,44.31%);
+    --p-gray-light-medium:hsl(0, 0%, 76%);
+    --p-gray-light:hsl(0, 0%, 61%);
+    --p-light:hsl(0, 0%, 96%);
+
+    --fs-big:36px;
+    --fs-big-medium:30px;
+    --fs-medium-big:20px;
+    --fs-medium-big-small:19px;
+    --fs-medium-big-xs:18px;
+    --fs-medium:17px;
+    --fs-medium-small:16px;
+    --fs-small:14px;
+    --fs-small-xs:12px;
+
+    --border-clr-grey:hsl(1,0%,15%);
+
+    --nav-medium-width:244px;
+    --nav-big-width:330px;
+    --nav-small-width:73px;
+    --nav-popup-width:397px;
+
+    --pp-inl-p:1rem;
+    --pp-inl-p-m:1.5rem;
+    --pp-bl-p-start:2rem;
+    --pp-bl-p-end:1.7rem;
+}
+
+.edit-profile-text-big{
+    font-size: 21px;
+}
+.edit-profile-text-medium{
+    font-size: var(--fs-medium);
+}
+.edit-profile-text-small{
+    font-size: var(--fs-small);
+}
+.edit-profile-grey{
+    color: var(--p-gray);
+}
+.edit-profile{
+ width: calc(100% - var(--nav-big-width));
+ margin-inline-start:var(--nav-big-width);
+}
+.edit-profile .edit-profile-sub{
+ margin: auto;
+ width: 100%;
+ max-width: 655px;
+ /* min-height: calc(105vh - 135px); */
+ padding-top: 3.3rem;
+}
+
+.edit-head-text>p{
+  font-weight: 700;
+}
+.edit-head-text{
+   margin-bottom: 2rem; 
+}
+.edit-profile-img{
+ width: 4.2rem;
+ height: 4.2rem;
+}
+.edit-profile-img img{
+    border-radius: 2rem;
+    object-fit: contain;
+    opacity: 90%;
+    background-color: hsla(0, 0%, 0%,20%);
+}
+.upload-profile-img-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding-block: .8rem;
+    padding-inline: 1.2rem;
+    background-color: var(--p-gray-black);
+    border-radius: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.upload-profile-img-cont .edit-profile-username{
+    flex-grow:1;
+}
+.upload-profile-img-cont .blue-btn{
+    padding-block: .5rem;
+    padding-inline: 1rem;
+    border-radius: .6rem;
+    font-size: var(--fs-medium-small);
+    font-weight: 600;
+}
+.upload-profile-img-cont .edit-profile-username{
+    font-size: var(--fs-medium-big);
+    font-weight: 600;
+}
+.edit-profile-form{
+ display: flex;
+ flex-direction: column;
+ gap: 1.2rem;
+}
+
+.edit-profile-form :is(textarea,input){
+    font-size: var(--fs-medium-small);
+    border-radius: .9rem;
+}
+.edit-profile-form label{
+    font-size: var(--fs-medium);
+    font-weight: 600;
+}
+.edit-profile-form textarea{
+   padding-block-start: .6rem;
+   padding-block-end:.8rem;
+   padding-inline-start: .8rem;
+   padding-inline-end: 15%;
+   resize: none;
+}
+.edit-profile-form input{
+    padding-block: .85rem;
+    padding-inline: 1.2rem;
+}
+.edit-profile-form :is(.genders,.bio){
+ background-color: black;
+ border: 1px solid var(--border-clr-grey);
+}
+.edit-profile-form input[type='text']{
+ background-color: var(--p-gray-black);
+}
+
+.edit-profile-form .genders{
+    font-size: medium;
+    border-radius: .9rem;
+}
+.edit-profile-form .genders:hover{
+  background-color: hsla(0, 0%, 11%, 0.534);
+}
+
+.edit-profile-form .submit-edit{
+ width: fit-content;
+ padding-inline: 7rem;
+ font-weight: 600;
+ font-size: var(--fs-small);
+ align-self: flex-end;
+ letter-spacing: .5px;
+ margin-top: .7rem;
+}
+
+.textarea-cont{
+    position: relative;
+
+}
+.textarea-cont textarea{
+    width: 100%;
+}
+.char-counter-absolute-cont{
+    position: absolute;
+    right: 1rem;
+    bottom: .8rem;
+    
+}
+
+.input-error{
+    color: hsl(0, 81%, 59%);
+    font-size: 14.8px;
+    position: absolute;
+    bottom: -.5rem;
+}
+
+.form-group:has(.input-error) :is(input,textarea){
+   border: 1px solid red;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: inherit;
+    padding-bottom: 1.3rem;
+}

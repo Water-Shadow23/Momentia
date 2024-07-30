@@ -1,0 +1,138 @@
+@font-face {
+    font-family: 'Segoe UI Regular';
+    src: local('Segoe UI Regular'), url('../fonts/Segoe UI/Segoe\ UI.woff') format('woff');
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face{
+    font-family:'VeganStyle';
+    src:
+    local('veganstyle'),
+    local('Veganstyle'),
+    local('VeganStyle'),
+    url('../fonts/VeganStyle/VeganStyle.ttf'),
+    format("ttf");
+    font-style: normal;
+    font-weight: 500;
+}   
+@font-face{
+    font-family:'Billabong';
+    src:
+    local('Billabong'),
+    local('Bilabong'),
+    local('bilabong'),
+    local('billabong'),
+    url('../fonts/Bilabong/billabong.woff'),
+    format("woff");
+    font-style: normal;
+    font-weight: 500;
+}   
+*,*::after,*::before{
+    box-sizing: border-box;
+}
+*{
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    color: var(--p-light);
+}
+ul{
+    list-style: none;
+}
+a{
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+img{
+    display: block;
+    width: 100%;  
+    height: 100%; 
+    object-fit: cover;
+    object-position: center;
+}
+input{
+    border: none;
+    color: var(--p-light);
+}
+input[type="text"]{
+    outline: none;
+}
+section,header,main,footer{
+    width: 100%;
+    position: relative;
+}
+section{
+    z-index: 1;
+    isolation: isolate;
+}
+header{
+    z-index: 2;
+    background-color: var(--main-bg-cl-bl);
+}
+body{
+    font-size: 1.25rem;
+    line-height: 1.125rem;
+    font-family:var(--main-ff);
+    overflow-x: hidden;
+    background-color: var(--main-bg-cl-bl);
+}
+video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+input[type='file']{
+    display: none;
+}
+
+:root{
+    --main-ff:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --logo-ff:"VeganStyle","Segoe UI", Roboto, Halvetica, Arial , sans-serif;
+
+    --main-bg-cl-bl:hsl(0, 0%, 0%);
+    --main-bg-cl-wt:hsl(0, 0%, 100%);
+    
+    --clr-tomato-red:hsl(355, 82%, 61%);
+    --clr-aqua-blue:hsl(207, 60%, 77%);
+    --clr-light-blue:hsl(204, 100%, 48%);
+    --clr-medium-blue:hsla(204, 95%, 50%, 0.955);
+    --clr-medium-dark-blue:hsla(204, 79%, 47%, 0.955);
+    --clr-medium-d-dark-blue:hsl(204, 79%, 41%);
+
+    --bg-gray-black:hsl(0, 0%, 7.9%);
+    --bg-gray-medium-up:#222322;  
+    --bg-gray-medium:hsl(0, 0%, 21%);
+    --bg-gray-medium-light:hsl(0, 0%, 23%);
+    --p-gray-black:hsl(0, 0%, 15%);
+    --p-gray:hsl(0,0%,44.31%);
+    --p-gray-light-medium:hsl(0, 0%, 76%);
+    --p-gray-light:hsl(0, 0%, 61%);
+    --p-light:hsl(0, 0%, 96%);
+
+    --fs-big:36px;
+    --fs-big-medium:30px;
+    --fs-medium-big:20px;
+    --fs-medium-big-small:19px;
+    --fs-medium-big-xs:18px;
+    --fs-medium:17px;
+    --fs-medium-small:16px;
+    --fs-small-big:15px;
+    --fs-small:14px;
+    --fs-small-xs:12px;
+
+    --border-clr-grey:hsl(1,0%,15%);
+
+    --nav-medium-width:244px;
+    --nav-big-width:330px;
+    --nav-small-width:73px;
+    --nav-popup-width:397px;
+    --settings-popup-width:266px;
+    --auth-cont-width:370px;
+
+    --pp-inl-p:1rem;
+    --pp-inl-p-m:1.5rem;
+    --pp-bl-p-start:2rem;
+    --pp-bl-p-end:1.7rem;
+}
