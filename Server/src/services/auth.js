@@ -29,7 +29,12 @@ async function login({username,password}){
 }
 
 async function register({username,password,email,fullName}){
-    const result = await actions.getByCustom({username,email});
+    const result = await actions.getByCustom({
+      $or:[
+        {email},
+        {username}
+      ]
+    });
     if(result){
         throw new ConflictError("User with that username or email already exist!",'UIError');
     }
@@ -45,7 +50,6 @@ async function register({username,password,email,fullName}){
     const token = createToken({
       username:newUser.username,
       _id:newUser._id,
-      interests:newUser.interests
     });
      
     return token;
