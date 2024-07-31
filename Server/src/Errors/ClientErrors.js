@@ -23,11 +23,10 @@ class ValidationError extends RequestError{
 class CredentialError extends ClientError {
     name = '';
     code;
-    constructor(message = 'Unauthorized',kind){
+    constructor(message = 'Unauthorized'){
       super(message);
       this.name = 'CredentialError';
       this.code = 401;
-      this.kind = kind;
     }
 }
 class AuthorizationError extends ClientError {

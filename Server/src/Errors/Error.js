@@ -10,21 +10,21 @@ class ServiceError extends Error{
 
 class ServerError extends ServiceError{
     name = '';
-    status = '';
+    type = '';
     constructor(message = 'Server Error'){
       super(message);
       this.name = 'ServerError';
-      this.status = 'internalFail'  
+      this.type = 'internalFail'  
     }
 }
 
 class ClientError extends ServiceError{
     name = '';
-    status = '';
+    type = '';
     constructor(message = 'Client Error'){
       super(message);
       this.name = 'ClientError';
-      this.status = 'externalFail'; 
+      this.type = 'externalFail'; 
     }
 }
 
