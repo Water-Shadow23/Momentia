@@ -42,7 +42,7 @@
     }
   }
 
-export default {
+export {
    GetRequest,
    PostRequest,
    PutRequest,
