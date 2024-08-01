@@ -4,8 +4,6 @@ import { convertBuffers, convertFromBlob } from "../utils/convertImage.js";
 export default function useImageUpload(){
   const [imagePreviewUrl,setImagePreviewUrl] = useState('');
   
-  
-  
      async function processFile(e){
             e.preventDefault();
             const blobData = e.dataTransfer?.files[0] || e.currentTarget.files[0] ;
@@ -16,7 +14,7 @@ export default function useImageUpload(){
             const imageBuffer = bufferConverter.convertToBuffer(imageArrayBuffer);
             const imageUrl = await blobConverter.convertToObjectUrl(blobData); 
            
-            return [imageUrl,imageArrayBuffer];
+            return [imageUrl,imageBuffer];
           }
           
           async function setImageUploadState(setData,body){
@@ -29,13 +27,6 @@ export default function useImageUpload(){
                 return body.data.imageBuffer;
               }
             });
-            // if(stateSetters){
-            //   //stateSetters where  every entry is an object with a state function and its newState.
-            //   for(let entry of stateSetters){
-            //     entry['setState']((preValue)=>entry['newState']())
-            //   }
-            // }
-            
             }
      
      return[
