@@ -1,11 +1,12 @@
 import SettingsDialog from "../../../components/SettingsDialog.jsx";
+import { overlayConstants } from "../../../constants/dispatchConstants.js";
 import { UseOverlay } from "../../../hooks/useOverlay.jsx";
 import CreatePost from "../../../pages/CreatePost/CreatePost.jsx";
 
 
 export default function NavData(data){
      
-     const {OpenOverlay,CloseOverlay,isOpen} = UseOverlay();
+     const {overlayDispatch,overlayState} = UseOverlay();
       
      const navi = [
         {
@@ -31,7 +32,11 @@ export default function NavData(data){
             hContent:'Create',
             options:{
               eventHandler:()=>{
-                OpenOverlay('Modal',CreatePost);
+                overlayDispatch({
+                  typeAction:overlayConstants.OPEN,
+                  component:CreatePost,
+                  typeOverlay:'Modal' 
+                });
               } 
             },
           },
@@ -61,10 +66,17 @@ export default function NavData(data){
             },
             options:{
               eventHandler:()=>{
-                if(!isOpen){
-                  OpenOverlay('Dialog',SettingsDialog,'header')
+                if(!overlayState.isOpen){
+                  overlayDispatch({
+                    typeAction:overlayConstants.OPEN,
+                    component:SettingsDialog,
+                    typeOverlay:'Dialog',
+                    destination:'header' 
+                  });
                 }else{
-                  CloseOverlay(); 
+                  overlayDispatch({
+                    typeAction:overlayConstants.CLOSE,
+                  });
                 }
               } 
             },

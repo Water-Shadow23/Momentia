@@ -5,7 +5,7 @@ import Comments from "../../Comments/Comments.jsx";
 
 export default function ProfilePostsBody() {
 
-    const {OpenOverlay} = UseOverlay();
+    const {overlayDispatch} = UseOverlay();
  
     return (
         <div className="profile-posts-cont">

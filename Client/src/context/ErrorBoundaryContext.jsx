@@ -1,35 +1,18 @@
-import React, { useState } from "react"
+import React, { useReducer } from "react"
 import {ErrorResponser} from "../components/ErrorResponser.jsx";
+import { errorReducer, initialState } from "../reducers/errorReducer.jsx";
 
 export const ErrorBoundaryContext = React.createContext({});
 
 
 export function ErrorBoundary({children}){
- const [errorState,setErrorState] = useState({
-   hasError:false,
-   error:''
- });
+ const [errorState,errorDispatch] = useReducer(errorReducer,initialState);
  
- function setError(errorData){
-   setErrorState(()=>({
-    hasError:true,
-    error:errorData
-   })) 
- }
-
- function resetError(){
-    setErrorState(()=>({
-     hasError:false,
-     error:''
-    }));
- }
-
-
  return (
     <>
     {
     !errorState.hasError ? 
-    <ErrorBoundaryContext.Provider value={{setError,resetError}}>
+    <ErrorBoundaryContext.Provider value={errorDispatch}>
      {children}
     </ErrorBoundaryContext.Provider>
     :

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { overlayConstants } from "../../constants/dispatchConstants.js";
 
-export default function Modal({isOpen,ComponentToRender,closeOverlay}){
+export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
 
        return(
           <>
@@ -13,7 +14,9 @@ export default function Modal({isOpen,ComponentToRender,closeOverlay}){
 
              <div className="close-popup-cross" onClick={(e)=>{
               if(e.target.closest('.close-popup-cros')){
-                closeOverlay();
+                overlayDispatch({
+                 typeAction:overlayConstants.CLOSE
+                })
               }
              }}>
                <i className="fa-solid fa-xmark"></i>
@@ -24,7 +27,9 @@ export default function Modal({isOpen,ComponentToRender,closeOverlay}){
      
        function closeModal(e){  
           if(!e.target.closest('#modal-cont')){
-            closeOverlay();
+           overlayDispatch({
+            typeAction:overlayConstants.CLOSE
+           })
           }    
        } 
 }

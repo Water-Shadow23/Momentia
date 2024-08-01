@@ -1,35 +1,36 @@
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments.jsx"
 import { UseOverlay } from "../../hooks/useOverlay.jsx";
+import { overlayConstants } from "../../constants/dispatchConstants.js";
 
 
 export default function Explore() {
     
-   const {OpenOverlay} = UseOverlay();
+   const {overlayDispatch} = UseOverlay();
 
     return (
         <section className="explore">
             <div className="explore-sub">
                <ExploreRow>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={1}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={2}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={3}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={4}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={5}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={1}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={2}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={3}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={4}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={5}/>
                </ExploreRow>
                <ExploreRow>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={6}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={7}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={8}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={9}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={10}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={6}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={7}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={8}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={9}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={10}/>
                </ExploreRow>
                <ExploreRow>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={11}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={12}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={13}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={14}/>
-                 <ExplorePostBox OpenOverlay={OpenOverlay} id={15}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={11}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={12}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={13}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={14}/>
+                 <ExplorePostBox overlayDispatch={overlayDispatch} id={15}/>
                </ExploreRow>
             </div>
         </section>
@@ -45,13 +46,17 @@ function ExploreRow({children}){
   )
 }
 
-function ExplorePostBox({OpenOverlay,id}){
+function ExplorePostBox({overlayDispatch,id}){
  
   return (
     <Link to="/" className="explore-box">
      <div className="box-in"
       onClick={(e)=>{
-        OpenOverlay('Modal',Comments);
+        overlayDispatch({
+          typeAction:overlayConstants.OPEN,
+          component:Comments,
+          typeOverlay:'Modal' 
+        });
        }}
      >
     <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />

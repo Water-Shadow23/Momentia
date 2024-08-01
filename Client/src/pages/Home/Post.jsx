@@ -3,13 +3,18 @@ import { UseOverlay } from "../../hooks/useOverlay.jsx"
 import Comments from "../Comments/Comments.jsx";
 import CommentForm from "../Comments/CommentForm.jsx";
 import PostIcons from "../../components/PostIcons.jsx";
+import { overlayConstants } from "../../constants/dispatchConstants.js";
  
  export default function Post(){
     
-    const {OpenOverlay} = UseOverlay();
+    const {overlayDispatch} = UseOverlay();
    
     function OpenComment(){
-      OpenOverlay('Modal',Comments);
+      overlayDispatch({
+        typeAction:overlayConstants.OPEN,
+        component:Comments,
+        typeOverlay:'Modal' 
+      });
     }
 
     return (
