@@ -20,12 +20,15 @@ async function login({username,password}){
    const token = createToken({
      username:user.username,
      _id:user._id,
-     interests:user.interests
    });
 
    
 
-   return token;
+   return {
+    token,
+    id:user._id
+  };
+
 }
 
 async function register({username,password,email,fullName}){
@@ -52,7 +55,10 @@ async function register({username,password,email,fullName}){
       _id:newUser._id,
     });
      
-    return token;
+    return {
+      token,
+      id:newUser._id
+    };
 }
 
 
