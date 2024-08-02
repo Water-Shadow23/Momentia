@@ -1,12 +1,20 @@
 const {Router} = require('express');
-const { createComment,editComment,deleteComment, likeComment, unlikeComment } = require('../controllers/details');
+const { createComment,editComment,deleteComment, likeComment, unlikeComment, getComments } = require('../controllers/details');
 const { tryCatch,tryCatchAsync,tryCatchAsyncEnd } = require('../middlewares/errorLayer');
 const { authPage, isAuthor } = require('../middlewares/guards');
-const { validateRequestBody, validateRequestData, isLikedAlready, checkResource } = require('../middlewares/middleware');
+const { validateRequestBody, validateRequestData, isLikedAlready, checkResource, checkIsValidQueryParams } = require('../middlewares/middleware');
 const { Comment } = require('../models/comment');
 
 const detailsRouter = Router();
 
+detailsRouter.get('/:id/comments',
+    tryCatch(authPage('u')),
+    tryCatch(checkIsValidQueryParams([
+       'limit',
+       'count' 
+    ])),
+    tryCatchAsyncEnd(getComments)
+);
 detailsRouter.post('/:id/comments/create',
                             tryCatch(authPage('u')),
                             tryCatch(validateRequestBody(

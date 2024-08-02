@@ -110,13 +110,15 @@ async function unSavePost(req,res){
 async function getPostData(req,res){
   const resourceId = req.params.id;
 
-  const postData = await dataPostActions.getByIdAndPopulate(resourceId,
-    {path:'comments',
-     model:Comment,
-     limit:20,
-     count:1
-    }
-  );
+  const postData = await dataPostActions.getById(resourceId);
+  
+  // await dataPostActions.getByIdAndPopulate(resourceId,
+  //   {path:'comments',
+  //    model:Comment,
+  //    limit:20,
+  //    count:1
+  //   }
+  // );
 
   res.status(200).json({
     code:200,
@@ -152,7 +154,22 @@ async function getPostsFromFollowedUsers(req,res){
    });
 }
 
+async function getPostLikes(req,res){
+  const postId = req.params.id;
 
+  const skip = (req.query.count-1)*req.query.limit;
+  const limit = req.query.limit;
+
+  const data = await dataPostActions.getByChunks({
+   _id:postId 
+  },skip,limit);
+
+  res.status(200).json({
+    code:200,
+    message:"Data retrieved successfully",
+    data:data
+   });
+}
 
 
 module.exports = {
@@ -165,5 +182,6 @@ module.exports = {
     unSavePost,
     getPostData,
     getAllPosts,
-    getPostsFromFollowedUsers
+    getPostsFromFollowedUsers,
+    getPostLikes
 }

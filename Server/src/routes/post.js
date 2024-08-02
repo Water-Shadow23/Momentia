@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const { createPost, editPost, deletePost, likePost, unlikePost, savePost, unSavePost, getPostData, getAllPosts, getPostsFromFollowedUsers } = require('../controllers/post');
+const { createPost, editPost, deletePost, likePost, unlikePost, savePost, unSavePost, getPostData, getAllPosts, getPostsFromFollowedUsers, getPostLikes } = require('../controllers/post');
 const { tryCatchAsyncEnd,tryCatch,tryCatchAsync } = require('../middlewares/errorLayer');
 const { authPage, isAuthor } = require('../middlewares/guards');
 const { validatePartialRequestBody, validateRequestData, checkResource, isLikedAlready, isSavedAlready, validateRequestBody, checkIsValidQueryParams } = require('../middlewares/middleware');
@@ -68,6 +68,7 @@ postRouter.get('/following',
 )
 postRouter.get('/:id',
               tryCatch(authPage('u')),
+              tryCatchAsync(checkResource(Post)),
               tryCatchAsyncEnd(getPostData) 
 );
 
@@ -80,6 +81,14 @@ postRouter.get('/',
               tryCatchAsyncEnd(getAllPosts) 
 )
 
+postRouter.get('/:id/likes',
+  tryCatch(authPage('u')),
+  tryCatch(checkIsValidQueryParams([
+     'limit',
+     'count' 
+  ])),
+  tryCatchAsyncEnd(getPostLikes)
+)
 
 module.exports = {
     postRouter

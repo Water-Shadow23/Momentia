@@ -1,23 +1,18 @@
 const {Comment} = require('../models/comment'); 
-const { Post } = require('../models/post');
 const {dataService} = require('../services/data');
 
 const commentActions = dataService(Comment);
-const postActions = dataService(Post);
 
 async function createComment(req,res){
   const resourceId = req.params.id;
   const userId = req.user._id;
   const data = {
-   author:userId, 
+   author:userId,
+   post:resourceId, 
    ...req.body, 
   };
   const newComment = await commentActions.createRecord(data); 
   
-  const post = await postActions.getByIdRaw(resourceId);
-   post.comments.push(newComment);
-   await post.save();
-
   res.status(201).json({
     code:201,
     message:"New comment has been successfully created",
@@ -43,11 +38,7 @@ async function deleteComment(req,res){
     const commentId = req.params.comId;
      
     await commentActions.deleteRecordById(commentId); 
-      
-    let comments = await postActions.getByIdProperty(resourceId,"comments");
-    comments = comments.filter(id=>id.toString()!==commentId);   
-    await postActions.updateRecordById(resourceId,{"comments":comments});
-
+    
     res.status(200).json({
       code:200,
       message:"The user's comment has been successfully deleted",
@@ -80,12 +71,28 @@ async function unlikeComment(req,res){
    });
 }
 
+async function getComments(req,res){
+ const postId = req.params.id;
 
+ const skip = (req.query.count-1)*req.query.limit;
+ const limit = req.query.limit;
+ 
+ const data = await commentActions.getByChunks({
+  post:postId
+ },skip,limit);
+
+ res.status(200).json({
+  code:200,
+  message:"Data retrieved successfully",
+  data:data
+ });
+}
 
 module.exports = {
   createComment,
   editComment,
   deleteComment,
   likeComment,
-  unlikeComment
+  unlikeComment,
+  getComments,
 }
