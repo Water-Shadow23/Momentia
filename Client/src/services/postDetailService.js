@@ -34,6 +34,7 @@ export async function editComment({
 
 export async function deleteComment({
   postId,
+  commentId,
   authKey,  
 }){
  const url = `${baseCommentUrl(postId)}/${commentId}/delete`;
