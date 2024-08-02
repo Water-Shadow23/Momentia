@@ -60,7 +60,7 @@ const userSchema = new Schema({
     values:['male','female','preferNotToSay'],
     message:`{VALUE} is not valid value`
   },
-   default:"Prefer not to say"
+   default:"preferNotToSay"
  },
  website:{
   type:String,
