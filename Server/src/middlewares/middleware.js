@@ -8,10 +8,14 @@ const {dataService} = require('../services/data');
  return async (req,res)=>{
   const actions = dataService(model);
   const id = req.params[paramIdName] || req.params.id || req.user._id;
-  const record =  await actions.getById(id)
-   if(!record){
+  try{
+    const record =  await actions.getById(id)
+    if(!record){
+     throw new NotFoundError('Resource not found!');
+    }
+  }catch(err){
     throw new NotFoundError('Resource not found!');
-   }
+  }
  } 
 }
 
