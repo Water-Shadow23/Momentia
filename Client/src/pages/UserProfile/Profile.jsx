@@ -1,10 +1,11 @@
 
 
-export default function Profile({children}) {
+export default function Profile() {
   return (
     <section className="profile-cont">
       <div className="profile-sub">
-        {children}
+        <ProfileDataHead />
+        <ProfilePostsBody />
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
+import HomePosts from "./HomePosts.jsx";
 
 
-export default function Home({children}) {
+export default function Home() {
 
     return (
         <section className="home">
@@ -10,7 +11,9 @@ export default function Home({children}) {
                         <p>Following</p>
                     </div>
                 </div>
-               {children}
+               
+              <HomePosts />
+
             </div>
         </section>
     )
