@@ -1,19 +1,5 @@
 
 
-export function Auth({children}){
-
-    return (
-     <section className="auth-section">
-       <div className="auth-sub">
-       
-       <div className="auth-cont-box">
-          {children}
-        </div>
-       
-       </div>
-     </section>   
-    )
-}
 
 export function AuthDown({ children }) {
 
