@@ -1,3 +1,4 @@
+const { Comment } = require('../models/comment');
 const {Post} = require('../models/post');
 const {User} = require('../models/user');
 const {dataService} = require("../services/data");
@@ -109,7 +110,13 @@ async function unSavePost(req,res){
 async function getPostData(req,res){
   const resourceId = req.params.id;
 
-  const postData = await dataPostActions.getById(resourceId);
+  const postData = await dataPostActions.getByIdAndPopulate(resourceId,
+    {path:'comments',
+     model:Comment,
+     limit:20,
+     count:1
+    }
+  );
 
   res.status(200).json({
     code:200,

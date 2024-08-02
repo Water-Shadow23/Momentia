@@ -16,9 +16,9 @@ const postSchema = new Schema({
     maxLength:[2200,'Caption should max 2200 characters'] 
  },
  comments:{
-  ref:"Comment",
-  type:[SchemaTypes.ObjectId],
-  default:[],
+   type:[SchemaTypes.ObjectId],
+   ref:"Comment",
+   default:[],
  },
  likes:{
     type:[SchemaTypes.ObjectId],

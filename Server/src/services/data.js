@@ -1,4 +1,5 @@
 const { User } = require("../models/user");
+const { Comment } = require("../models/comment");
 
 async function getAll(model){
     return model.find({}).lean();
@@ -21,12 +22,21 @@ async function getByIdProperty(model,id,name){
     return propertie
 }
 async function getByIdAndPopulate(model,id,...properties){
-  const query = model.findById(id);
-  for(let propName of properties){
-   query = query.populate(propName);
+  const query = model.findById(id).lean();
+  if(properties){
+    for(let entry of properties){
+    query.populate({
+      path:entry.path,
+      model:entry.model,
+      options:{
+        limit:entry.limit,
+        skip:(entry.count-1)*entry.limit
+      }
+    });
+    }
   }
-  const record = await query.lean();
-  return record.lean();
+  const record = await query;
+  return record;
 }
 async function createRecord(model,data){
  const newRecord = new model(data);
