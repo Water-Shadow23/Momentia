@@ -108,3 +108,8 @@ const request = new PatchRequest(url,null,authKey);
 return request.sendToServer();
 }
 
+// export async function getPostLikes({
+
+// }){
+
+// }

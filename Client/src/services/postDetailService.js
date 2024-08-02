@@ -1,4 +1,4 @@
-import {PostRequest,PatchRequest,DeleteRequest} from './request/RequestMethods.js'
+import {PostRequest,PatchRequest,DeleteRequest, GetRequest} from './request/RequestMethods.js'
 
 import config from "../configs/envConfig.js";
 const env = config();
@@ -65,3 +65,12 @@ export async function unlikeComment({
  return request.sendToServer();
 }
 
+export async function getComments({
+ postId,
+ authKey
+}){
+ const url = `${baseCommentUrl(postId)}`;
+ const request = new GetRequest(url,null,authKey);
+
+ return request.sendToServer();
+}
