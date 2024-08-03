@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UseOverlay } from "../../../hooks/useOverlay.jsx";
 import Comments from "../../Comments/Comments.jsx";
+import useTabs from "../../../hooks/useTabs.jsx";
+import { tabs } from "../tabData.jsx";
 
 export default function ProfilePostsBody() {
 
@@ -11,7 +13,7 @@ export default function ProfilePostsBody() {
         <div className="profile-posts-cont">
 
             <div className="profile-posts-head">
-              <ProfilePostHeadLinks />
+              <ProfilePostsHeadTabs />
             </div>
 
             <div className="profile-posts-body">
@@ -38,44 +40,27 @@ export default function ProfilePostsBody() {
     )
 }
 
-function ProfilePostHeadLinks() {
-
-    const [active,setActiveState] = useState({
-      key:''  
-    });
-
-    function setActive(e){
-        if(e.currentTarget.id !== active.key){
-            setActiveState({
-                key:e.currentTarget.id
-            })
-         }
-    }
+function ProfilePostsHeadTabs() {
+     
+    
+    const location = useLocation();
+    const [activeTab,setActive] = useTabs(tabs);
+    
 
     return (
         <>
-            <Link to="/accaunts" 
-            className={`profile-box-head ${active.key === 'posts' ? 'profile-box-active' : ''}`} 
-            id="posts"
-            onClick={(e)=>{
-                setActive(e);
-            }}
-            >
-                <span className="material-symbols-outlined">grid_on</span>
-                <p>Posts</p>
-            </Link>
-            <Link to="/accaunts/saved" 
-            className={`profile-box-head ${active.key === 'saved' ? 'profile-box-active' : ''}`}
-            id="saved"
-            onClick={(e)=>{
-               setActive(e);
-            }}
-            >
-                <i className="fa-regular fa-bookmark"></i>
-                <p>Saved</p>
-            </Link>
+         {tabs.map(tab=>
+           <Link to={tab.location} key={tab.key} className={tab.className(activeTab.key)}
+           onClick={()=>{
+            setActive(tab.key,location.pathname)
+           }} 
+           >
+             {tab.children}
+           </Link> 
+         )}  
         </>
     )
+
 }
 
 function ProfilePostRow({ children }) {
