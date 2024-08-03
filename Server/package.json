@@ -11,12 +11,13 @@
   "author": "George Manov",
   "license": "ISC",
   "dependencies": {
-    
     "bcrypt": "^5.1.1",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.4.5"
+    "mongoose": "^8.4.5",
+    "nanoid": "^3.3.7",
+    "nanoid-dictionary": "^5.0.0-beta.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
