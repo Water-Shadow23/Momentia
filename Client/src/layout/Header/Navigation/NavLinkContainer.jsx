@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {NavLink} from 'react-router-dom'
 
 
@@ -41,7 +40,7 @@ export function NavigationLink({
 export function  NavigationOptions({
   hContent,options,children,
   setActiveLink,active
-}){
+}){ 
  
   return (
     <>
@@ -49,7 +48,7 @@ export function  NavigationOptions({
          className={`htext-cont ${active.key === hContent? 'hactive' : ''}`}
          onClick={(e)=>{
           setDivOptionActive(e)
-          options.eventHandler()
+          options.eventHandler(e)
          }}   
         >
           <div className='link-box'> 

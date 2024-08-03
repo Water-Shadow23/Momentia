@@ -3,7 +3,7 @@ import useImageUpload from '../../hooks/useImageUpload.jsx';
 import { useState } from 'react';
 import EditForm from './Form/EditForm.jsx';
 
-export default function EditProfile() {
+export default function ProfileEdit() {
      
     //instead of directly changing the photo add overlay and do it from there
     // const {OpenOverlay,CloseOverlay,isOpen} = UseOverlay();
@@ -21,6 +21,9 @@ export default function EditProfile() {
     }
 
     return (
+        <>
+
+
         <section className="edit-profile">
             <div className="edit-profile-sub">
                 <div className="edit-head-text">
@@ -45,6 +48,7 @@ export default function EditProfile() {
 
             </div>
         </section>
+        </>
     )
 }
 

@@ -43,7 +43,7 @@ import { overlayConstants } from "../../constants/dispatchConstants.js";
           <div className="all-likes">
              <p>30,023 likes</p>
           </div>
-          <Link  to='/' 
+          <Link  to='' 
           className="all-comments"
           onClick={OpenComment} 
           >

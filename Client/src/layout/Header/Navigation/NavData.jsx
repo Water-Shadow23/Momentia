@@ -35,7 +35,7 @@ export default function NavData(data){
                 overlayDispatch({
                   typeAction:overlayConstants.OPEN,
                   component:CreatePost,
-                  typeOverlay:'Modal' 
+                  typeOverlay:'Modal', 
                 });
               } 
             },
@@ -47,7 +47,7 @@ export default function NavData(data){
         {
           props:{
             hContent:'Profile',
-            link:`/:accauntName/`,
+            link:`/accaunts`,
           }, 
           icon:
             <div className='profile-icon'>
@@ -65,7 +65,8 @@ export default function NavData(data){
             isLinkTo:false
             },
             options:{
-              eventHandler:()=>{
+              eventHandler:(e)=>{
+             
                 if(!overlayState.isOpen){
                   overlayDispatch({
                     typeAction:overlayConstants.OPEN,

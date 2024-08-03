@@ -140,7 +140,7 @@ export default function EditForm() {
          {errors.bio && <p className="input-error">{errors.bio.message}</p>}
          </div>
          
-         <label htmlFor="gender">Gender</label>
+         <label htmlFor="genders">Gender</label>
          <Controller 
          name="gender"
          control={control}

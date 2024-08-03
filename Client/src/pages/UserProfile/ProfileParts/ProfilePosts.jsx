@@ -41,7 +41,7 @@ export default function ProfilePostsBody() {
 function ProfilePostHeadLinks() {
 
     const [active,setActiveState] = useState({
-        key:'posts'
+      key:''  
     });
 
     function setActive(e){
@@ -54,7 +54,7 @@ function ProfilePostHeadLinks() {
 
     return (
         <>
-            <Link to="/accaunts/" 
+            <Link to="/accaunts" 
             className={`profile-box-head ${active.key === 'posts' ? 'profile-box-active' : ''}`} 
             id="posts"
             onClick={(e)=>{
@@ -64,7 +64,7 @@ function ProfilePostHeadLinks() {
                 <span className="material-symbols-outlined">grid_on</span>
                 <p>Posts</p>
             </Link>
-            <Link to="/accaunts/saved/" 
+            <Link to="/accaunts/saved" 
             className={`profile-box-head ${active.key === 'saved' ? 'profile-box-active' : ''}`}
             id="saved"
             onClick={(e)=>{
