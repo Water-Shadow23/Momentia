@@ -1,4 +1,4 @@
-import React , {useReducer} from 'react'
+import React , {useReducer, useRef, useState} from 'react'
 import Overlay from '../layout/Popups/Overlays.jsx';
 import Modal from '../layout/Popups/Modal.jsx';
 import Dialog from '../layout/Popups/Dialog.jsx';
@@ -9,7 +9,6 @@ export const OverlayContext = React.createContext({});
 
 export function OverlayProvider({children}){
  const [overlayState,overlayDispatch] = useReducer(overlayReducer,initialState); 
- 
 
  return (
     <>
@@ -26,7 +25,7 @@ export function OverlayProvider({children}){
        
      {overlayState.typeOverlay === 'Dialog' ?
          <Overlay destination={overlayState.destinationToRender}>
-           <Dialog {...overlayState} />  
+           <Dialog {...overlayState} overlayDispatch={overlayDispatch}/>  
          </Overlay> : ''
      } 
     </>

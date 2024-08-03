@@ -1,8 +1,8 @@
 
 
-export default function Dialog({isOpen,ComponentToRender}){
+export default function Dialog({isOpen,ComponentToRender,overlayDispatch}){
 
     if(isOpen){
-      return <ComponentToRender />
+      return <ComponentToRender overlayDispatch={overlayDispatch}/>
     }
 }
