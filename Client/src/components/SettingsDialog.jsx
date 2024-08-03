@@ -1,17 +1,34 @@
 import {Link} from 'react-router-dom'
+import { overlayConstants } from '../constants/dispatchConstants.js'
 
-export default function SettingsDialog(){
+export default function SettingsDialog(setActiveState){
   
-     
-
+  return ({overlayDispatch}) =>{
     return(
         <div className="settings-popup">
             <div className="settings-upper-box">
-               <Link to="#" className="settings-box link-box">
+               <Link to="/accaunts/edit" className="settings-box link-box" onClick={()=>{
+                  setActiveState({
+                    isActive:false,
+                    key:''
+                  });
+                  overlayDispatch({
+                    typeAction:overlayConstants.CLOSE
+                  })
+               }}>
                 <i className="fa-solid fa-gear"></i>
                  <p>Settings</p>
                </Link>
-               <Link to="#" className="settings-box link-box">
+               <Link to="/accaunts/saved" className="settings-box link-box"  onClick={()=>{
+                  setActiveState({
+                    isActive:false,
+                    key:''
+                  });
+                  overlayDispatch({
+                    typeAction:overlayConstants.CLOSE
+                  });
+                  
+              }}>
                 <i className="fa-solid fa-bookmark"></i>
                 <p>Saved</p>
                </Link>
@@ -29,4 +46,5 @@ export default function SettingsDialog(){
             </div>
        </div>
     )
+  }
 }

@@ -65,16 +65,18 @@ export default function NavData(data){
             isLinkTo:false
             },
             options:{
-              eventHandler:(e)=>{
+              eventHandler:(e,setActiveState)=>{
              
                 if(!overlayState.isOpen){
+
                   overlayDispatch({
                     typeAction:overlayConstants.OPEN,
-                    component:SettingsDialog,
+                    component:SettingsDialog(setActiveState),
                     typeOverlay:'Dialog',
                     destination:'header' 
                   });
                 }else{
+                 
                   overlayDispatch({
                     typeAction:overlayConstants.CLOSE,
                   });

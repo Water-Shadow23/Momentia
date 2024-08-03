@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import {NavLink} from 'react-router-dom'
 
 
 export function NavigationLink({
-  hContent,link,options,children,
-  setActiveLink,active
+  hContent,link,options,children
 }){
 
     return (
@@ -20,7 +20,7 @@ export function NavigationLink({
          </NavLink> : 
          
          <div 
-         className={`htext-cont ${active.key === hContent? 'hactive' : ''}`}
+         className={`htext-cont`}
          onClick={(e)=>{
            options.eventHandler()
          }}   
@@ -38,17 +38,21 @@ export function NavigationLink({
 }
 
 export function  NavigationOptions({
-  hContent,options,children,
-  setActiveLink,active
+  hContent,options,children
 }){ 
+
+  const [activeState,setActiveState] = useState({
+    key:'',
+    isActive:false
+  });
  
   return (
     <>
     <div 
-         className={`htext-cont ${active.key === hContent? 'hactive' : ''}`}
+         className={`htext-cont ${activeState.key === hContent? 'hactive' : ''}`}
          onClick={(e)=>{
-          setDivOptionActive(e)
-          options.eventHandler(e)
+          setDivActive()
+          options.eventHandler(e,setActiveState)
          }}   
         >
           <div className='link-box'> 
@@ -59,15 +63,18 @@ export function  NavigationOptions({
     </>
   )
 
-  function setDivOptionActive(e){
-    if(e.currentTarget.classList.contains('hactive')){
-      setActiveLink({
-       key:''
+  function setDivActive(){
+    if(activeState.isActive){
+      setActiveState({
+       key:'',
+       isActive:false
       }); 
       return;
+    }else{
+      setActiveState({
+         key:hContent,
+         isActive:true
+       }); 
     }    
-     setActiveLink({
-       key:hContent
-     }); 
  }
 }
