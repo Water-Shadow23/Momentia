@@ -5,72 +5,81 @@ import { overlayConstants } from "../../constants/dispatchConstants.js";
 
 
 export default function Explore() {
-    
-   const {overlayDispatch} = UseOverlay();
 
-    return (
-        <section className="explore">
-            <div className="explore-sub">
-               <ExploreRow>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={1}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={2}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={3}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={4}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={5}/>
-               </ExploreRow>
-               <ExploreRow>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={6}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={7}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={8}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={9}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={10}/>
-               </ExploreRow>
-               <ExploreRow>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={11}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={12}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={13}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={14}/>
-                 <ExplorePostBox overlayDispatch={overlayDispatch} id={15}/>
-               </ExploreRow>
-            </div>
-        </section>
-    )
+  const { overlayDispatch } = UseOverlay();
+
+  return (
+    <>
+    <section className="explore">
+      <ExploreBody overlayDispatch={overlayDispatch}/> 
+    </section>
+    </>
+  )
 }
 
-function ExploreRow({children}){
- 
+function ExploreBody({overlayDispatch}) {
+
   return (
-    <div className="row-up-5">
-        {children}
+    <div className="explore-sub">
+      <ExploreRow>
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={1} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={2} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={3} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={4} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={5} />
+      </ExploreRow>
+      <ExploreRow>
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={6} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={7} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={8} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={9} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={10} />
+      </ExploreRow>
+      <ExploreRow>
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={11} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={12} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={13} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={14} />
+        <ExplorePostBox overlayDispatch={overlayDispatch} id={15} />
+      </ExploreRow>
     </div>
   )
 }
 
-function ExplorePostBox({overlayDispatch,id}){
- 
+function ExploreRow({ children }) {
+
   return (
-    <Link to="/" className="explore-box">
-     <div className="box-in"
-      onClick={(e)=>{
-        overlayDispatch({
-          typeAction:overlayConstants.OPEN,
-          component:Comments,
-          typeOverlay:'Modal' 
-        });
-       }}
-     >
-    <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
-    <div className="explore-box-stats">
-      <div className="explore-box-likes">
-       <i className="fa-regular fa-heart"></i>
-       6k
-     </div>
-      <div className="explore-box-comments">
-       <i className="fa-regular fa-comment"></i>
-       1.2k
-     </div>
+    <div className="row-up-5">
+      {children}
     </div>
-    </div>   
-   </Link>
-  )  
+  )
+}
+
+function ExplorePostBox({ overlayDispatch, id }) {
+
+  return (
+    <Link to="" className="explore-box">
+      <div className="box-in"
+        onClick={(e) => {
+          overlayDispatch({
+            typeAction: overlayConstants.OPEN,
+            component: Comments,
+            typeOverlay: 'Modal'
+          });
+        }}
+      >
+        <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
+        <div className="explore-box-stats">
+          <div className="explore-box-likes">
+            <i className="fa-regular fa-heart"></i>
+            6k
+          </div>
+          <div className="explore-box-comments">
+            <i className="fa-regular fa-comment"></i>
+            1.2k
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
 }
