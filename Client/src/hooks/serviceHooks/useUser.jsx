@@ -31,17 +31,17 @@ export function useUser(){
      });
     }
 
-    async function followUser(){
+    async function followUser(userId){
      return userService.followUser({
         authKey:authState.authKey,
-        userId:authState.userId
+        userId:userId
      }); 
     }
 
-    async function unfollowUser(){
+    async function unfollowUser(userId){
      return userService.unfollowUser({
         authKey:authState.authKey,
-        userId:authState.userId 
+        userId:userId
      });  
     }
 
