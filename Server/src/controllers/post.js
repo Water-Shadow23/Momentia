@@ -1,3 +1,6 @@
+const {customAlphabet} = require('nanoid');
+const {alphanumeric} = require('nanoid-dictionary');
+
 const { Comment } = require('../models/comment');
 const {Post} = require('../models/post');
 const {User} = require('../models/user');
@@ -5,10 +8,15 @@ const {dataService} = require("../services/data");
 const dataPostActions = dataService(Post);
 const dataUserActions = dataService(User);
 
+
 async function createPost(req,res){
   const userId = req.user._id;
+  const nanoId = customAlphabet(alphanumeric,15);
+  const postId = nanoId();
+  
   const postData = {
       author:userId,
+      id:postId,
       ...req.body
   }
   const newPost = await dataPostActions.createRecord(postData);

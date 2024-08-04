@@ -1,6 +1,11 @@
 const {model,Schema,SchemaTypes} = require('mongoose');
 
 const postSchema = new Schema({
+ id:{
+  type:String,
+  required:true,
+  match:[/[A-Za-z0-9_]+/g,'id must be alphanumeric value'],
+ },  
  author:{
     required:true,
     ref:"User",
