@@ -1,3 +1,4 @@
+const { Post } = require("../models/post");
 const {User} = require("../models/user");
 const {dataService} = require('../services/data');
 
@@ -51,9 +52,17 @@ async function unfollowProfile(req,res){
   });
 }
 
+
 async function getProfileSavedPost(req,res){
   const userId = req.user._id;
-  const userData =  await userActions.getById(userId);
+  const userData =  await userActions.getByIdAndPopulate(userId,
+    {
+        path:'saved',
+        model:Post,
+        limit:req.query.limit,
+        count:req.query.count   
+    }
+);
 
   res.status(200).json({
     code:200,
@@ -61,10 +70,16 @@ async function getProfileSavedPost(req,res){
     data:{saved:userData['saved']},
 });
 }
-
 async function getProfilePosts(req,res){
     const userId = req.user._id;
-    const userData =  await userActions.getById(userId);
+    const userData =  await userActions.getByIdAndPopulate(userId,
+        {
+            path:'posts',
+            model:Post,
+            limit:req.query.limit,
+            count:req.query.count   
+        }
+    );
   
     res.status(200).json({
       code:200,
@@ -72,10 +87,16 @@ async function getProfilePosts(req,res){
       data:{posts:userData.posts},
   });
 }
-
 async function getProfileData(req,res){
     const userId = req.user._id;
-    const userData =  await userActions.getById(userId);
+    const userData =  await userActions.getByIdAndPopulate(userId,
+        {
+        path:'posts',
+        model:Post,
+        limit:10,
+        count:1
+        }
+    );
 
     res.status(200).json({
         code:200,
@@ -85,6 +106,50 @@ async function getProfileData(req,res){
 }
 
 
+async function getUserData(req,res){
+    const userId = req.params.id;
+    const userData =  await userActions.getByIdAndPopulate(userId,
+        {
+        path:'posts',
+        model:Post,
+        limit:10,
+        count:1
+        }
+    );
+
+    res.status(200).json({
+        code:200,
+        message:"Data retrieved successfully",
+        data:{
+          id:userData.id, 
+          username:userData.username,
+          fullName:userData.fullName,
+          email:userData.email,
+          posts:userData.posts,
+          followers:userData.followers, 
+          following:userData.following, 
+          gender:userData.gender, 
+        },
+    });
+}
+
+async function getUserPosts(req,res){
+    const userId = req.params.id;
+    const userData =  await userActions.getByIdAndPopulate(userId,
+        {
+            path:'posts',
+            model:Post,
+            limit:req.query.limit,
+            count:req.query.count   
+        }
+    );
+  
+    res.status(200).json({
+      code:200,
+      message:"Data retrieved successfully",
+      data:{posts:userData.posts},
+  });
+}
 
 module.exports = {
     editProfile,
@@ -93,5 +158,7 @@ module.exports = {
     unfollowProfile,
     getProfileSavedPost,
     getProfilePosts,
-    getProfileData
+    getProfileData,
+    getUserData,
+    getUserPosts
 } 
