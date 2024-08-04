@@ -1,5 +1,5 @@
 import ProfileDataHead from "./ProfileParts/ProfileData";
-import ProfilePostsBody from "./ProfileParts/ProfilePosts";
+import {ProfilePostsBody} from "./ProfileParts/ProfilePosts";
 
 
 export default function Profile() {

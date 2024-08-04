@@ -10,6 +10,7 @@ import ProfileEdit from "../pages/EditProfile/Edit.jsx";
 import Login from "../pages/Auth/Login/Login.jsx";
 import Register from "../pages/Auth/Register/Register.jsx";
 import NotFound from "../pages/NotFound/NotFound.jsx";
+import { ProfileOwnPosts, ProfileSavedPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
 
 
 
@@ -21,22 +22,30 @@ export default function Router() {
           <Routes>
 
             <Route element={<Main />}>
+
              <Route path='/' element={<Home />} />
              <Route path='/explore' element={<Explore />} />
+
              <Route path='/accaunts' element={<Profile />}>
-                <Route path="saved" />
+                 <Route path="" element={<ProfileOwnPosts />} />
+                 <Route path="saved" element={<ProfileSavedPosts />} />
              </Route>
+
              <Route path='/accaunts/edit' element={<ProfileEdit />} />
+
             </Route>
 
             <Route element={<Auth />}>
+
              <Route path="/login" element={<Login />} />
              <Route path="/register" element={<Register />} />
+             
             </Route>
 
             <Route element={<Main />}>
              <Route path="*" element={<NotFound />} />
             </Route>  
+
           </Routes>
         </OverlayProvider> 
     </>

@@ -1,38 +1,24 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { UseOverlay } from "../../../hooks/useOverlay.jsx";
 import Comments from "../../Comments/Comments.jsx";
 import useTabs from "../../../hooks/useTabs.jsx";
 import { tabs } from "../tabData.jsx";
 
-export default function ProfilePostsBody() {
+export  function ProfilePostsBody() {
 
-    const {overlayDispatch} = UseOverlay();
- 
+    const { overlayDispatch } = UseOverlay();
+
     return (
         <div className="profile-posts-cont">
 
             <div className="profile-posts-head">
-              <ProfilePostsHeadTabs />
+                <ProfilePostsHeadTabs />
             </div>
 
             <div className="profile-posts-body">
 
-                <ProfilePostRow>
-                    <ProfilePost id='1' />
-                    <ProfilePost id='2' />
-                    <ProfilePost id='3' />
-                </ProfilePostRow>
-                <ProfilePostRow>
-                    <ProfilePost id='g' />
-                    <ProfilePost id='c' />
-                    <ProfilePost id='b' />
-                </ProfilePostRow>
-                <ProfilePostRow>
-                    <ProfilePost id='a' />
-                    <ProfilePost id='s' />
-                    <ProfilePost id='d' />
-                </ProfilePostRow>
+               <Outlet />
 
             </div>
 
@@ -40,24 +26,73 @@ export default function ProfilePostsBody() {
     )
 }
 
-function ProfilePostsHeadTabs() {
-     
-    
-    const location = useLocation();
-    const [activeTab,setActive] = useTabs(tabs);
-    
+export function ProfileSavedPosts() {
 
     return (
         <>
-         {tabs.map(tab=>
-           <Link to={tab.location} key={tab.key} className={tab.className(activeTab.key)}
-           onClick={()=>{
-            setActive(tab.key,location.pathname)
-           }} 
-           >
-             {tab.children}
-           </Link> 
-         )}  
+            <ProfilePostRow>
+                <ProfilePost id='d' />
+                <ProfilePost id='s' />
+                <ProfilePost id='a' />
+            </ProfilePostRow>
+            <ProfilePostRow>
+                <ProfilePost id=';' />
+                <ProfilePost id='\' />
+                <ProfilePost id=']' />
+            </ProfilePostRow>
+            <ProfilePostRow>
+                <ProfilePost id='p' />
+                <ProfilePost id='8' />
+                <ProfilePost id='7' />
+            </ProfilePostRow>
+
+        </>
+    )
+}
+
+
+export function ProfileOwnPosts() {
+    return (
+        <>
+            <ProfilePostRow>
+                <ProfilePost id='1' />
+                <ProfilePost id='2' />
+                <ProfilePost id='3' />
+            </ProfilePostRow>
+            <ProfilePostRow>
+                <ProfilePost id='g' />
+                <ProfilePost id='c' />
+                <ProfilePost id='b' />
+            </ProfilePostRow>
+            <ProfilePostRow>
+                <ProfilePost id='a' />
+                <ProfilePost id='s' />
+                <ProfilePost id='d' />
+            </ProfilePostRow>
+
+        </>
+    )
+}
+
+
+function ProfilePostsHeadTabs() {
+
+
+    const location = useLocation();
+    const [activeTab, setActive] = useTabs(tabs);
+
+
+    return (
+        <>
+            {tabs.map(tab =>
+                <Link to={tab.location} key={tab.key} className={tab.className(activeTab.key)}
+                    onClick={() => {
+                        setActive(tab.key, location.pathname)
+                    }}
+                >
+                    {tab.children}
+                </Link>
+            )}
         </>
     )
 
@@ -79,18 +114,18 @@ function ProfilePost({ id }) {
             <div className="box-in"
             //onClick={}
             >
-            <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
-            
-            <div className="profile-post-stats">
-                <div className="profile-post-likes post-stat">
-                    <i className="fa-regular fa-heart"></i>
-                    15.4k
+                <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
+
+                <div className="profile-post-stats">
+                    <div className="profile-post-likes post-stat">
+                        <i className="fa-regular fa-heart"></i>
+                        15.4k
+                    </div>
+                    <div className="profile-post-comments post-stat">
+                        <i className="fa-regular fa-comment"></i>
+                        65
+                    </div>
                 </div>
-                <div className="profile-post-comments post-stat">
-                    <i className="fa-regular fa-comment"></i>
-                    65
-                </div>
-            </div>
             </div>
         </Link>
     )
