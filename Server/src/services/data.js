@@ -38,6 +38,25 @@ async function getByIdAndPopulate(model,id,...properties){
   const record = await query;
   return record;
 }
+
+async function getByCustomAndPopulate(model,filters,...properties){
+  const query = model.findOne(filters).lean();
+  if(properties){
+    for(let entry of properties){
+    query.populate({
+      path:entry.path,
+      model:entry.model,
+      options:{
+        limit:entry.limit,
+        skip:(entry.count-1)*entry.limit
+      }
+    });
+    }
+  }
+  const record = await query;
+  return record;
+}
+
 async function createRecord(model,data){
  const newRecord = new model(data);
  await newRecord.save();
@@ -68,6 +87,7 @@ module.exports = {
          ["getById"]:bind(getById,model),  
          ["getByCustom"]:bind(getByCustom,model),  
          ["getByIdAndPopulate"]:bind(getByIdAndPopulate,model),  
+         ["getByCustomAndPopulate"]:bind(getByCustomAndPopulate,model),  
          ["createRecord"]:bind(createRecord,model),  
          ["updateRecordById"]:bind(updateRecordById,model),  
          ["deleteRecordById"]:bind(deleteRecordById,model),
