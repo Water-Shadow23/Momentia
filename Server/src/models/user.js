@@ -1,11 +1,14 @@
 const {model,Schema,SchemaTypes} = require('mongoose');
 
 const userSchema = new Schema({
+ id:{
+  type:String,
+  required:true,
+  match:[/[A-Za-z0-9_]+/g,'id must be alphanumeric value']
+ }, 
  username:{
   required:true,
   type:String,
-  minLength:[4,'Username should be atleast 4 characters'],
-  
  },
  fullName:{
     required:true,
@@ -14,7 +17,6 @@ const userSchema = new Schema({
  email:{
     required:true,
     type:String,
-    minLength:[10,'Email should be atleast 5 characters']
  },
  password:{
     required:true,

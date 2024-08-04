@@ -5,6 +5,9 @@ const { createToken } = require('./jwt');
 
 const { RequestError, ConflictError } = require('../Errors/ClientErrors');
 
+const { customAlphabet } = require('nanoid');
+const { alphanumeric } = require('nanoid-dictionary');
+
 const actions = dataService(User);
 
 async function login({username,password}){
@@ -20,9 +23,7 @@ async function login({username,password}){
    const token = createToken({
      username:user.username,
      _id:user._id,
-   });
-
-   
+   }); 
 
    return {
     token,
@@ -39,9 +40,14 @@ async function register({username,password,email,fullName}){
       ]
     });
     if(result){
-        throw new ConflictError("User with that username or email already exist!",'UIError');
+      throw new ConflictError("User with that username or email already exist!",'UIError');
     }
+
+    const nanoId = customAlphabet(alphanumeric,15);
+    const userId = nanoId();  
+
     const newUser = new User({
+        id:userId,
         username,
         password:await bcrypt.hash(password,10),
         email,
@@ -55,6 +61,7 @@ async function register({username,password,email,fullName}){
       _id:newUser._id,
     });
      
+
     return {
       token,
       id:newUser._id
