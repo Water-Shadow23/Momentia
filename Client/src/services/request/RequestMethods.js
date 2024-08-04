@@ -15,13 +15,6 @@
     }
   }
   
-  class PostRequest extends Request{   
-  
-    constructor(url,body,authKey){
-      super('POST',url,body,authKey);
-    }
-  }
-  
   class PutRequest extends Request{
   
     constructor(url,body,authKey){
