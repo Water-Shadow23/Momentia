@@ -4,10 +4,9 @@ import { regexTextValidations } from '../utils/form.js';
 const {checkRegex,regexOnlyLetters} = regexTextValidations();
 
 const LoginSchema = z.object({
- email:z.string()
+ username:z.string()
  .trim()
- .min(1,'Email is required!')
- .email('Invalid email address')
+ .min(1,'Username is required!')
  ,
  password:z.string()
  .trim()
@@ -18,9 +17,10 @@ const LoginSchema = z.object({
 
 const RegisterSchema = LoginSchema.extend({
  fullName:fullName,
- username:z.string()
+ email:z.string()
  .trim()
- .min(1,'Username is required!')
+ .min(1,'Email is required!')
+ .email('Invalid email address')
  ,
 });
 

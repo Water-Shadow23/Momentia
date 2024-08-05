@@ -5,11 +5,11 @@ const env = config();
 const baseURL = env.API_BASE_URL;
 
 async function login(
-  {email,password}
+  {username,password}
 ){
  const url = `${baseURL}/login`;   
  const request = new PostRequest(url,{
-  email,
+  username,
   password
  });
  
