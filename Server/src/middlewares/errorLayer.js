@@ -13,7 +13,8 @@ function tryCatchAsync(controller) {
                   message: err.message,
                   errors:err.errors,
                   kind:err.kind,
-                  type:err.type 
+                  type:err.type,
+                  ok:false 
                 });
       });
   };
@@ -32,7 +33,8 @@ function tryCatch(controller) {
               message: err.message,
               errors:err.errors,
               kind:err.kind,
-              type:err.type  
+              type:err.type,
+              ok:false  
             });
     }
   };
@@ -52,7 +54,8 @@ function tryCatchAsyncEnd(controller){
                   message: err.message,
                   errors:err.errors,
                   kind:err.kind,
-                  type:err.type 
+                  type:err.type,
+                  ok:false 
                  });
       });
   };
@@ -70,7 +73,8 @@ function tryCatchEnd(controller){
               message: err.message,
               errors:err.errors,
               kind:err.kind,
-              type:err.type  
+              type:err.type,
+              ok:false  
             });
     }
   };

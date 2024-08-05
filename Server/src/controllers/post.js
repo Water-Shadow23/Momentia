@@ -28,7 +28,8 @@ async function createPost(req,res){
   res.status(201).json({
    code:201,
    message:"New post has been successfully created",
-   data:newPost
+   data:newPost,
+   ok:true
   });
 }
 
@@ -41,7 +42,8 @@ async function editPost(req,res){
  res.status(200).json({
     code:200,
     message:"The user's post has been successfully updated",
-    data:updatedPost
+    data:updatedPost,
+    ok:true
  });
 }
 
@@ -57,7 +59,8 @@ async function deletePost(req,res){
 
     res.status(200).json({
         code:200,
-        message:"The user's post has been successfully deleted"
+        message:"The user's post has been successfully deleted",
+        ok:true
      })
 }
 
@@ -70,7 +73,8 @@ async function likePost(req,res){
   res.status(200).json({
     code:200,
     message:"New like has been successfully added to post",
-    data:data
+    data:data,
+    ok:true
    });
 }
 
@@ -83,7 +87,8 @@ async function unlikePost(req,res){
     res.status(200).json({
       code:200,
       message:"User's like has been successfully deleted from post",
-      data:data
+      data:data,
+      ok:true
      });
 }
 
@@ -96,7 +101,8 @@ async function savePost(req,res){
   res.status(200).json({
     code:200,
     message:"The user has successfully saved the post.",
-    data:userData
+    data:userData,
+    ok:true
    });
 };
 
@@ -109,7 +115,8 @@ async function unSavePost(req,res){
   res.status(200).json({
     code:200,
     message:"The user has successfully unsaved the post.",
-    data:userData
+    data:userData,
+    ok:true
    });
 }
 
@@ -131,7 +138,8 @@ async function getPostData(req,res){
   res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:postData
+    data:postData,
+    ok:true
    });
 };
 
@@ -144,7 +152,8 @@ async function getAllPosts(req,res){
    res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:chunkData
+    data:chunkData,
+    ok:true
    });
 }
 
@@ -158,7 +167,8 @@ async function getPostsFromFollowedUsers(req,res){
    res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:chunkData
+    data:chunkData,
+    ok:true
    });
 }
 
@@ -175,7 +185,8 @@ async function getPostLikes(req,res){
   res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:data
+    data:data,
+    ok:true
    });
 }
 

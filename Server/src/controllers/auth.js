@@ -11,7 +11,8 @@ module.exports = {
             code: 200,
             message: "User registered successfully",
             token: token,
-            id:id
+            id:id,
+            ok:true
           });
       } catch (err) {
         throw err;
@@ -28,7 +29,8 @@ module.exports = {
             code: 200,
             message: "User logged in successfully",
             token: token,
-            id:id
+            id:id,
+            ok:true
           });
       } catch (err) {
         throw err;

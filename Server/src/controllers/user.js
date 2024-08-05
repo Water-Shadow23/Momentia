@@ -11,7 +11,8 @@ async function editProfile(req,res){
     res.status(200).json({
         code:200,
         message:"The user's account has been successfully updated",
-        data:updatedData
+        data:updatedData,
+        ok:true
     });
 };
 
@@ -20,7 +21,8 @@ async function deleteProfile(req,res){
    await userActions.deleteRecordById(id);
    res.status(200).json({
     code:200,
-    message:"The user's account has been successfully deleted"
+    message:"The user's account has been successfully deleted",
+    ok:true
    });
 };
 
@@ -34,7 +36,8 @@ async function followProfile(req,res){
  res.status(200).json({
     code:200,
     message:"The user account has been successfully followed",
-    data:updatedData
+    data:updatedData,
+    ok:true
 });
 }
 
@@ -48,7 +51,8 @@ async function unfollowProfile(req,res){
    res.status(200).json({
       code:200,
       message:"The user account has been successfully unfollowed",
-      data:updatedData
+      data:updatedData,
+      ok:true
   });
 }
 
@@ -68,6 +72,7 @@ async function getProfileSavedPost(req,res){
     code:200,
     message:"Data retrieved successfully",
     data:{saved:userData['saved']},
+    ok:true
 });
 }
 async function getProfilePosts(req,res){
@@ -85,6 +90,7 @@ async function getProfilePosts(req,res){
       code:200,
       message:"Data retrieved successfully",
       data:{posts:userData.posts},
+      ok:true
   });
 }
 async function getProfileData(req,res){
@@ -102,6 +108,7 @@ async function getProfileData(req,res){
         code:200,
         message:"Data retrieved successfully",
         data:userData,
+        ok:true
     });
 }
 
@@ -130,6 +137,7 @@ async function getUserData(req,res){
           following:userData.following, 
           gender:userData.gender, 
         },
+        ok:true
     });
 }
 
@@ -148,6 +156,7 @@ async function getUserPosts(req,res){
       code:200,
       message:"Data retrieved successfully",
       data:{posts:userData.posts},
+      ok:true
   });
 }
 

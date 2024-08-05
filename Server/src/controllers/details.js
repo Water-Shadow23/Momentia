@@ -16,7 +16,8 @@ async function createComment(req,res){
   res.status(201).json({
     code:201,
     message:"New comment has been successfully created",
-    data:newComment
+    data:newComment,
+    ok:true
    });
 }
 
@@ -29,7 +30,8 @@ async function editComment(req,res){
   res.status(200).json({
     code:200,
     message:"The user's comment has been successfully updated",
-    data:updatedComment
+    data:updatedComment,
+    ok:true
  });
 }
 
@@ -42,6 +44,7 @@ async function deleteComment(req,res){
     res.status(200).json({
       code:200,
       message:"The user's comment has been successfully deleted",
+      ok:true
    });
 }
 
@@ -54,7 +57,8 @@ async function likeComment(req,res){
   res.status(200).json({
     code:200,
     message:"New like has been successfully added to comment",
-    data:data
+    data:data,
+    ok:true
    });
 }
 
@@ -67,7 +71,8 @@ async function unlikeComment(req,res){
   res.status(200).json({
     code:200,
     message:"User's like has been successfully deleted from comment",
-    data:data
+    data:data,
+    ok:true
    });
 }
 
@@ -84,7 +89,8 @@ async function getComments(req,res){
  res.status(200).json({
   code:200,
   message:"Data retrieved successfully",
-  data:data
+  data:data,
+  ok:true
  });
 }
 
