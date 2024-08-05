@@ -11,6 +11,7 @@ import Login from "../pages/Auth/Login/Login.jsx";
 import Register from "../pages/Auth/Register/Register.jsx";
 import NotFound from "../pages/NotFound/NotFound.jsx";
 import { ProfileOwnPosts, ProfileSavedPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
+import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
 
 
 
@@ -23,23 +24,24 @@ export default function Router() {
 
             <Route element={<Main />}>
 
-             <Route path='/' element={<Home />} />
-             <Route path='/explore' element={<Explore />} />
+             <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
 
-             <Route path='/accaunts' element={<Profile />}>
+             <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
+
+             <Route path='/accaunts' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
                  <Route path="" element={<ProfileOwnPosts />} />
                  <Route path="saved" element={<ProfileSavedPosts />} />
              </Route>
 
-             <Route path='/accaunts/edit' element={<ProfileEdit />} />
+             <Route path='/accaunts/edit' element={<ErrorBoundary> <ProfileEdit /> </ErrorBoundary>} />
 
             </Route>
 
             <Route element={<Auth />}>
 
-             <Route path="/login" element={<Login />} />
-             <Route path="/register" element={<Register />} />
-             
+             <Route path="/login" element={<ErrorBoundary> <Login /> </ErrorBoundary>} />
+             <Route path="/register" element={<ErrorBoundary> <Register /> </ErrorBoundary>} />
+
             </Route>
 
             <Route element={<Main />}>

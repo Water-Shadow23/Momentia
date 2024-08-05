@@ -1,28 +1,42 @@
 import { Navigate } from "react-router-dom"
-import NotFoundPage from "../pages/NotFound/NotFoundPage"
+import NotFound from "../pages/NotFound/NotFound.jsx"
+import useAuth from "../hooks/serviceHooks/useAuth.jsx"
+import { useEffect } from "react";
 
 
 
-export function ErrorResponser({error}){
+export function ErrorResponser({error,dispatch}){
    
+   const {logoutUser} = useAuth();
+
+   useEffect(()=>{
+    dispatch({
+      typeAction:'resetError'  
+    })
+   },[error,dispatch])
+
    if(error.type === 'externalFail'){
       if(error.code === 404){
         return (
             <>
-            <NotFoundPage />
+            <NotFound />
             </>
         )
       } 
        if(error.code === 403){
            return (
                <>
-               <NotFoundPage />
+               <NotFound />
                </>
            )
        }
        if(error.code === 401){
-        //TODO clear token from cookie
-         
+        logoutUser();
+        return (
+            <>
+            <Navigate to='/login' />
+            </>
+        )
        }
 
    } 

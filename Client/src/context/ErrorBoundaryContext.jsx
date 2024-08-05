@@ -16,7 +16,7 @@ export function ErrorBoundary({children}){
      {children}
     </ErrorBoundaryContext.Provider>
     :
-    <ErrorResponser error={errorState.error}/> 
+    <ErrorResponser error={errorState.error} dispatch={errorDispatch}/> 
     }
     </>
  )

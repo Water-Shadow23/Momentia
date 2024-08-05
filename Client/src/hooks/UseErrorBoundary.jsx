@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ErrorBoundaryContext } from "../components/ErrorBoundary.jsx";
+import { ErrorBoundaryContext } from "../context/ErrorBoundaryContext.jsx";
 
 
 export default function useErrorBoundary(){

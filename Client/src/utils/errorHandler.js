@@ -8,7 +8,7 @@ export default function isBadRequest(error){
                name:error.name,
                message:error.message,
             });
-           return false;
+           return true;
           }
           else if(error.name === 'ValidationError'){
             console.error({
@@ -16,8 +16,8 @@ export default function isBadRequest(error){
                message:error.message,
                errors:error.errors,
             });
-           return false; 
+           return true; 
           }
     } 
-    return true;
+    return false;
    }
