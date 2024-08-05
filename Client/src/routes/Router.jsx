@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { OverlayProvider } from "../context/OverlayContext.jsx";
 import Main from "../layout/Main.jsx";
 import Auth from "../layout/Auth.jsx";
 
@@ -12,7 +11,7 @@ import Register from "../pages/Auth/Register/Register.jsx";
 import NotFound from "../pages/NotFound/NotFound.jsx";
 import { ProfileOwnPosts, ProfileSavedPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
 import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
-import { AuthProvider } from "../context/AuthContext.jsx";
+import PersistedAuthState from "../components/PersistedAuthState.jsx";
 
 
 
@@ -20,12 +19,11 @@ export default function Router() {
 
   return (
     <>
-       <AuthProvider>   
-        <OverlayProvider>
           <Routes>
 
+           <Route element={<PersistedAuthState />}>
             <Route element={<Main />}>
-
+              
              <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
 
              <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
@@ -37,7 +35,10 @@ export default function Router() {
 
              <Route path='/accaunts/edit' element={<ErrorBoundary> <ProfileEdit /> </ErrorBoundary>} />
 
+             <Route path="*" element={<NotFound />} />
+             
             </Route>
+           </Route>  
 
             <Route element={<Auth />}>
 
@@ -46,13 +47,8 @@ export default function Router() {
 
             </Route>
 
-            <Route element={<Main />}>
-             <Route path="*" element={<NotFound />} />
-            </Route>  
-
+           
           </Routes>
-        </OverlayProvider> 
-       </AuthProvider> 
     </>
   )
 }
