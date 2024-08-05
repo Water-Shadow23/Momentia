@@ -1,6 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import {zodResolver} from '@hookform/resolvers/zod'
 import { RegisterSchema } from "../../../Validations/authValidation.js"
+import useErrorBoundary from "../../../hooks/UseErrorBoundary.jsx";
+import useAuth from "../../../hooks/serviceHooks/useAuth.jsx";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function RegisterForm(){  
     const  {
@@ -9,15 +13,53 @@ export default function RegisterForm(){
      formState:{errors},
      handleSubmit,
      setError,
-
+     clearErrors 
     } = useForm({
       mode:'onSubmit',
       resolver:zodResolver(RegisterSchema)
     })
-
+    const {registerUser} = useAuth();
+    const errorDispatch = useErrorBoundary();
+    const navigate = useNavigate();
+ 
     async function onRegisterSubmit(data){
-     console.log(data);
+     try{
+      await registerUser(data);
+      navigate('/');
+      
+     }catch(err){
+
+        if(err.kind === 'UIError'){
+          setError('custom',{
+            message:err.message
+          })
+        }else{
+         errorDispatch({
+           typeAction:'setError',
+           error:err
+         });
+        } 
+      
+     }
+
     }
+
+    const [values,setValues] = useState();
+    const watchValues = useWatch({
+      control:control
+    }); 
+    
+    useEffect(()=>{
+      setValues(()=>({...watchValues}))
+    },[errors.custom]);
+    useEffect(()=>{
+      for(let key in values){
+        if(values[key] !== watchValues[key]){
+          clearErrors('custom');
+          break;
+        }
+      }
+    },[watchValues])
 
     return (
 
@@ -65,7 +107,7 @@ export default function RegisterForm(){
             {errors.password && <p className="input-error" style={{textAlign:'center'}}>{errors.password.message}</p>}
             </div> 
 
-            <p className="input-grand-error"></p>    
+            <p className="input-grand-error">{errors.custom?.message}</p>    
                
             <input 
             type="submit" 

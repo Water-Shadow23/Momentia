@@ -1,6 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import {zodResolver} from '@hookform/resolvers/zod'
 import { LoginSchema } from "../../../Validations/authValidation.js"
+import useAuth from "../../../hooks/serviceHooks/useAuth.jsx"
+import useErrorBoundary from "../../../hooks/UseErrorBoundary.jsx"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function LoginForm(){
     const  {
@@ -8,15 +12,56 @@ export default function LoginForm(){
         register,
         formState:{errors},
         handleSubmit,
+        setError,
+        clearErrors
    
        } = useForm({
          mode:'onSubmit',
          resolver:zodResolver(LoginSchema)
        }) 
-    
+    const {loginUser} = useAuth();
+    const errorDispatch = useErrorBoundary();
+    const navigate = useNavigate();
+
     async function onLoginSubmit(data){
-      console.log(data);
+      try{
+        await loginUser(data);
+        navigate('/');
+        
+       }catch(err){
+  
+          if(err.kind === 'UIError'){
+            setError('custom',{
+              message:err.message,
+              type:'onChange'
+            })
+          }else{
+            errorDispatch({
+             typeAction:'setError',
+             error:err
+           });
+          } 
+        
+       }
     }
+
+    const [values,setValues] = useState();
+    const watchValues = useWatch({
+      control:control
+    }); 
+    
+
+    useEffect(()=>{
+      setValues(()=>({...watchValues}))
+    },[errors.custom]);
+    useEffect(()=>{
+      for(let key in values){
+        if(values[key] !== watchValues[key]){
+          clearErrors('custom');
+          break;
+        }
+      }
+    },[watchValues])
 
     return (
    
@@ -24,13 +69,13 @@ export default function LoginForm(){
          
             <div className="form-group">
              <input 
-             type="email" 
-             name="email" 
-             placeholder="Email" 
+             type="text"
+             name="username" 
+             placeholder="Username" 
              className="auth-field" 
-             {...register('email')}
+             {...register('username')}
              />
-            {errors.email && <p className="input-error">{errors.email.message}</p>}
+            {errors.username && <p className="input-error">{errors.username.message}</p>}
             </div>
             <div className="form-group">
              <input 
@@ -43,7 +88,7 @@ export default function LoginForm(){
             {errors.password && <p className="input-error" style={{textAlign:'center'}}>{errors.password.message}</p>}
             </div>
            
-            <p className="input-grand-error"></p>    
+            <p className="input-grand-error">{errors.custom?.message}</p>    
              
              <input 
              type="submit" 
