@@ -5,10 +5,11 @@ export const AuthContext = React.createContext({});
 
 export function AuthProvider({children}){
   const [authState,authDispatch] = useReducer(authReducer,initialState);
+  
       
   return (
-   <AuthContext value={{authDispatch,authState}}>
+   <AuthContext.Provider value={{authDispatch,authState}}>
     {children}
-   </AuthContext>
+   </AuthContext.Provider>
   )  
 }

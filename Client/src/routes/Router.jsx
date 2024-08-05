@@ -12,6 +12,7 @@ import Register from "../pages/Auth/Register/Register.jsx";
 import NotFound from "../pages/NotFound/NotFound.jsx";
 import { ProfileOwnPosts, ProfileSavedPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
 import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
+import { AuthProvider } from "../context/AuthContext.jsx";
 
 
 
@@ -19,6 +20,7 @@ export default function Router() {
 
   return (
     <>
+       <AuthProvider>   
         <OverlayProvider>
           <Routes>
 
@@ -50,6 +52,7 @@ export default function Router() {
 
           </Routes>
         </OverlayProvider> 
+       </AuthProvider> 
     </>
   )
 }
