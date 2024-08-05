@@ -161,6 +161,9 @@ body:has(.auth-section){
     color: hsl(0, 81%, 59%);
     position: relative;
 }
+.input-grand-error{
+    text-align: center;
+}
 .auth-section .input-error{
   font-size: 12.5px;
   bottom: 0;
