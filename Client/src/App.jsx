@@ -1,14 +1,22 @@
 import './assets/css/style.css'
-import {Routes,Route} from "react-router-dom";
 import Router from './routes/Router.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { OverlayProvider } from './context/OverlayContext.jsx';
+
 
 function App() {
-  
-  
+
+
 
   return (
     <>
-    <Router />
+     
+        <AuthProvider>
+            <OverlayProvider>
+              <Router />
+            </OverlayProvider>
+        </AuthProvider>
+     
     </>
   )
 }
