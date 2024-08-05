@@ -3,8 +3,8 @@
   
   class GetRequest extends Request{
   
-    constructor(url,body,authKey){
-      super('GET',url,body,authKey);
+    constructor(url,authKey){
+      super('GET',url,'',authKey);
     }
   }
   
@@ -30,8 +30,8 @@
   }
   class DeleteRequest extends Request{
   
-    constructor(url,body,authKey){
-      super('DELETE',url,body,authKey);
+    constructor(url,authKey){
+      super('DELETE',url,'',authKey);
     }
   }
 

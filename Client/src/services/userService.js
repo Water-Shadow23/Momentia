@@ -9,7 +9,7 @@ export async function getAccauntOwnPosts({
  authKey
 }){
  const url = `${baseURL}${baseUserURL}/posts`;
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
 
  return request.sendToServer();
 }
@@ -18,7 +18,7 @@ export async function getAccauntSavedPosts({
  authKey
 }){
  const url = `${baseURL}${baseUserURL}/saved`;
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
 
  return request.sendToServer();
 }
@@ -27,7 +27,7 @@ export async function getAccauntData({
  authKey
 }){
  const url = `${baseURL}${baseUserURL}`;
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
 
  return request.sendToServer();
 }
@@ -46,7 +46,7 @@ export async function deleteAccaunt({
  authKey
 }){
  const url = `${baseURL}${baseUserURL}/delete`;
- const request = new DeleteRequest(url,null,authKey);
+ const request = new DeleteRequest(url,authKey);
 
  return request.sendToServer();
 }

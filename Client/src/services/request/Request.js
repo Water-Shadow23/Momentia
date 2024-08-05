@@ -6,13 +6,15 @@ export default class Request{
         headers:{
           'Content-Type': 'application/json',
         },
-        body:''
+        
     }
     
     constructor(method,url,body,authKey){
       this.url = url;
       this.options.method = method || '';
-      this.options.body = JSON.stringify(body) || '';
+      if(method!=='GET' &&  method!=='HEAD'){
+        this.options.body = JSON.stringify(body) || '';
+      }
       if(authKey){
         this.options.headers['Auth-Key'] = authKey;
       }
