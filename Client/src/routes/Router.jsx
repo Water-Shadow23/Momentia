@@ -9,7 +9,7 @@ import ProfileEdit from "../pages/EditProfile/Edit.jsx";
 import Login from "../pages/Auth/Login/Login.jsx";
 import Register from "../pages/Auth/Register/Register.jsx";
 import NotFound from "../pages/NotFound/NotFound.jsx";
-import { ProfileOwnPosts, ProfileSavedPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
+import { ProfileOwnPosts, ProfileSavedPosts, UserPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
 import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
 import PersistedAuthState from "../components/PersistedAuthState.jsx";
 
@@ -25,6 +25,10 @@ export default function Router() {
             <Route element={<Main />}>
               
              <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
+
+             <Route path='/:userId' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
+                <Route path="" element={<ErrorBoundary> <UserPosts /> </ErrorBoundary>} />
+             </Route>
 
              <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
 
