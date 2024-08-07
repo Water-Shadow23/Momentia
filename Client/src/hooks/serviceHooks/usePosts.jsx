@@ -14,6 +14,7 @@ export default function usePost(){
 
    async function getPostsFromFollowedUsers(count,limit){
     return postService.getPostsFromFollowedUsers({
+      authKey:authState.authKey,
       count,
       limit
     });

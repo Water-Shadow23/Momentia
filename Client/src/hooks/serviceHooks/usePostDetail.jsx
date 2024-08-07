@@ -47,8 +47,11 @@ export default function usePostDetail(){
      });
     }
     
-    async function getComments(count,limit){
-      
+    async function getComments(postId){
+      return postDetailService.getComments({
+        postId,
+        authKey:authState.authKey
+      })
     }
 
     return {
