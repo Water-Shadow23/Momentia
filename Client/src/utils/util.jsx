@@ -2,7 +2,7 @@
  
  function setOuterData(setData){
     
-    function addCommentPlus(postId){
+    function addOuterComment(postId){
         setData((preDatas)=>{
 
           for(let key in preDatas){
@@ -15,7 +15,7 @@
          return {...preDatas}
         });
     }
-    function addLikePlus(postId,userId){
+    function addOuterLike(postId,userId){
       setData((preDatas)=>{
         for(let key in preDatas){
           if(preDatas[key]._id === postId){
@@ -26,7 +26,7 @@
        return {...preDatas}
       });
     }
-    function removeLikeMinus(postId,userId){
+    function removeOuterLike(postId,userId){
       setData((preDatas)=>{
         for(let key in preDatas){
           if(preDatas[key]._id === postId){
@@ -39,9 +39,9 @@
     }
 
     return {
-      addCommentPlus,
-      addLikePlus,
-      removeLikeMinus
+      addOuterComment,
+      addOuterLike,
+      removeOuterLike
     }
   }
 
