@@ -60,7 +60,7 @@ export async function unlikeComment({
   authKey,  
 }){
  const url = `${baseCommentUrl(postId)}/${commentId}/unlike`;
- const request = new PatchRequest(url,null,authKey);
+ const request = new DeleteRequest(url,authKey);
 
  return request.sendToServer();
 }
