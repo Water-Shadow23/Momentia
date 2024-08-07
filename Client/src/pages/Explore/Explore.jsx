@@ -62,7 +62,7 @@ function ExploreBody({overlayDispatch}) {
     if(posts.length){
 
       for(let i = 0 ; i<posts.length;i++){
-       if(i%5 === 0){
+       if(i%6 === 0){
         postCont.push(
         <ExploreRow key={i}>
           <ExplorePostBox
@@ -129,7 +129,7 @@ function ExplorePostBox({ overlayDispatch, data , setOuterData }) {
         onClick={(e) => {
           overlayDispatch({
             typeAction: overlayConstants.OPEN,
-            component: Comments(data._id,setOuterData),
+            component: Comments(data._id,setOuterData,overlayDispatch),
             typeOverlay: 'Modal'
           });
         }}
