@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PostIcons from "../../components/PostIcons.jsx";
 import {Comment, CommentCaption} from "./Comment.jsx";
 import CommentForm from "./CommentForm.jsx";
@@ -6,12 +6,12 @@ import usePost from "../../hooks/serviceHooks/usePosts.jsx";
 import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
 import isBadRequest from "../../utils/errorHandler.js";
 import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
-import { errorConstants } from "../../constants/dispatchConstants.js";
+import { errorConstants, overlayConstants } from "../../constants/dispatchConstants.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { Link } from "react-router-dom";
 
-
-export default function Comments(postId,setOuterData){
-  
+export default function Comments(postId,setOuterData,overlayDispatch){
+    
    return function (){
         const {getPostData} = usePost();
         const {getComments} = usePostDetail();
@@ -19,12 +19,14 @@ export default function Comments(postId,setOuterData){
 
       const [postData,setPostData] = useState();  
       const {authState} = useContext(AuthContext);
+      const isAuthor = useRef(false);
 
       useEffect(()=>{
         (async function(){
             try{
               const postResData = await getPostData(postId);
               const commentsResData = await getComments(postId);
+              isAuthor.current = postResData.data.author._id === authState.userId;
               setPostData(()=>({
                 ...postResData.data,
                 comments:commentsResData.data
@@ -39,6 +41,7 @@ export default function Comments(postId,setOuterData){
             }
           })()
       },[]) 
+      
 
       function addComment(comment){
         setPostData((preData)=>{
@@ -46,7 +49,7 @@ export default function Comments(postId,setOuterData){
           return {...preData} 
         });
         if(setOuterData){
-            setOuterData.addCommentPlus(postId);
+            setOuterData.addOuterComment(postId);
         }
       }
 
@@ -56,7 +59,7 @@ export default function Comments(postId,setOuterData){
             return {...preData} 
           });
           if(setOuterData){
-              setOuterData.addLikePlus(postId,authState.userId);
+              setOuterData.addOuterLike(postId,authState.userId);
           }
       }
       function addCommentLike(comId){
@@ -81,24 +84,11 @@ export default function Comments(postId,setOuterData){
             return {...preData} 
           });
           if(setOuterData){
-              setOuterData.removeLikeMinus(postId,authState.userId);
+              setOuterData.removeOuterLike(postId,authState.userId);
           }
       }
 
-      function addSaved(){
-        setPostData((preData)=>{
-            preData.author.saved.push(postId);
-            return {...preData} 
-          });
-      }
-
-      function removeSaved(){
-        setPostData((preData)=>{
-            preData.author.saved =  preData.author.saved.filter(id=>id!==postId);
-            return {...preData} 
-          });
-      } 
-
+           
       return (
         <>
        {postData ? 
@@ -110,12 +100,26 @@ export default function Comments(postId,setOuterData){
        </div>
        <div className="comments-sub-cont">
            <div className="author-cont">
-               <a href="#" className="profile-circle showPreviewProfile">
+               <Link to={isAuthor.current ? '/accaunts' : `/${postData.author.id}` }
+               className="profile-circle showPreviewProfile"
+               onClick={()=>{
+                overlayDispatch({
+                  typeAction:overlayConstants.CLOSE
+                })
+              }}
+               >
                    <img src={postData.author?.profilePhoto || ''} alt="" /> 
-               </a>
-               <a href="#" className="profile-name showPreviewProfile">
+               </Link>
+               <Link to={isAuthor.current ? '/accaunts' : `/${postData.author.id}` } 
+               className="profile-name showPreviewProfile"
+               onClick={()=>{
+                overlayDispatch({
+                  typeAction:overlayConstants.CLOSE
+                })
+              }}
+               >
                    <p>{postData.author.username}</p>
-                </a>
+                </Link>
                 <div className="three-dots">
                    ...
                 </div>
@@ -126,7 +130,9 @@ export default function Comments(postId,setOuterData){
            <CommentCaption data={{
             author:postData.author,
             caption:postData.caption
-           }} /> 
+           }} 
+           overlayDispatch={overlayDispatch}
+           /> 
            }
            {postData.comments.map(commentData=>{
             return <Comment data={commentData}  key={commentData._id}
@@ -134,6 +140,7 @@ export default function Comments(postId,setOuterData){
               addCommentLike,
               removeCommentLike,
             }}
+            overlayDispatch={overlayDispatch}
             />
            })}
              
@@ -144,10 +151,9 @@ export default function Comments(postId,setOuterData){
              <PostIcons data={postData} likeActions={{
                 addLikeOuter,
                 removeLikeOuter
-             }} 
+             }}
              saveActions={{
-              addSaved,
-              removeSaved
+              removeOuterSave:setOuterData?.removeOuterSave
              }}
              />
     

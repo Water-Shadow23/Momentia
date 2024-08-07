@@ -14,7 +14,7 @@ const commentSchema = z.object({
 
 export default  function CommentForm(props){
    
-  const errorDispatch = useErrorBoundary();
+  const {errorDispatch} = useErrorBoundary();
   const {createComment} = usePostDetail();
 
    const {

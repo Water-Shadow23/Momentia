@@ -1,12 +1,14 @@
 import { useContext, useState } from "react";
-import { toggleBool } from "../../utils/util.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
+import { Link } from "react-router-dom";
+import { overlayConstants } from "../../constants/dispatchConstants.js";
 
 
 
-export function Comment({data,likeActions}){
+export function Comment({data,likeActions,overlayDispatch}){
     const {authState} = useContext(AuthContext);
+
     const [isLiked,setIsLiked] = useState(()=>{
        const WeLiked =  data.likes.includes(authState.userId);
        if(WeLiked){
@@ -17,20 +19,36 @@ export function Comment({data,likeActions}){
        }
     });
 
+    const isAuthor = data.author._id === authState.userId;
+    
     const {likeComment,unlikeComment} = usePostDetail();
 
     return (
         <div className="comment">
         <div className="profile-circle">
-          <a href="#" className="showPreviewProfile">
+          <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+          className="showPreviewProfile"
+          onClick={()=>{
+            overlayDispatch({
+              typeAction:overlayConstants.CLOSE
+            })
+          }}
+          >
               <img src={data.author.profilePhoto || ''} alt="" /> 
-          </a>
+          </Link>
         </div>
         <div className="comment-cont">
           <div className="comment-text">
-           <a href="#" className="comment-profile-name showPreviewProfile">
+           <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+           className="comment-profile-name showPreviewProfile"
+           onClick={()=>{
+            overlayDispatch({
+              typeAction:overlayConstants.CLOSE
+            })
+          }}
+           >
             {data.author.username}
-           </a>
+           </Link>
            <div className="comment-content">
              {data.content}
            </div>
@@ -73,7 +91,10 @@ export function Comment({data,likeActions}){
     )
 }
 
-export function CommentCaption({data}){
+export function CommentCaption({data,overlayDispatch}){
+  const {authState} = useContext(AuthContext);
+  
+  const isAuthor = data.author._id === authState.userId;
 
   return (
     <>
@@ -81,15 +102,29 @@ export function CommentCaption({data}){
         marginBottom:'.8rem'
       }}>
         <div className="profile-circle">
-          <a href="#" className="showPreviewProfile">
+          <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+          className="showPreviewProfile"
+          onClick={()=>{
+            overlayDispatch({
+              typeAction:overlayConstants.CLOSE
+            })
+          }}
+          >
               <img src={data.author.profilePhoto || ''} alt="" /> 
-          </a>
+          </Link>
         </div>
         <div className="comment-cont">
           <div className="comment-text">
-           <a href="#" className="comment-profile-name showPreviewProfile">
+           <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` }
+           className="comment-profile-name showPreviewProfile"
+           onClick={()=>{
+            overlayDispatch({
+              typeAction:overlayConstants.CLOSE
+            })
+          }}   
+           >
             {data.author.username}
-           </a>
+           </Link>
            <div className="comment-content" style={{
             whiteSpace:'pre-wrap'
            }}>
