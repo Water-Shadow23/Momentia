@@ -37,7 +37,25 @@ export default function ProfileDataHead(){
 
    },[authState,params.userId])
    
-   
+   function followActions(){
+     function followOuter(){
+       setProfileData((preData)=>{
+          preData.followers.push(authState.userId);
+          return {...preData}
+       });
+     }
+    function unfollowOuter(){
+      setProfileData((preData)=>{
+       preData.followers = preData.followers.filter((id)=>id!==authState.userId);
+       return {...preData}
+      });
+    }
+
+    return {
+      followOuter,
+      unfollowOuter
+    }
+   }
 
    return (
     <>
@@ -57,7 +75,7 @@ export default function ProfileDataHead(){
        {UserIsUs.current ? 
        <OwnProfileActions /> 
        :
-       <DisownProfileActions />
+       <DisownProfileActions profileData={profileData} followActions={followActions()}/>
       }    
 
      </div>
@@ -98,12 +116,52 @@ function OwnProfileActions(){
     )
 }
 
-function DisownProfileActions(){
+function DisownProfileActions({profileData,followActions}){
+  const {authState} = useContext(AuthContext);  
+  const [followState,setFollowState] = useState();
+  const {followUser,unfollowUser} = useUser(); 
+   
+  useEffect(()=>{
+   if(profileData){
+    setFollowState(()=>{
+      const WeAreIn = profileData.followers.includes(authState.userId);
+      if(WeAreIn){
+       return true; 
+      }else{
+        return false;
+      }
+    })
+   } 
+  },[profileData])
 
    return (
     <>
-    <div className="blue-btn follow-btn">Follow</div> 
-    {/* <div className="grey-btn follow-btn">Following</div>  */}
+    {
+      followState===false ? 
+      <div className="blue-btn follow-btn"
+      onClick={async ()=>{
+       try{
+         await followUser(profileData._id);
+         followActions.followOuter();
+         setFollowState(()=>true);
+       }catch(err){
+
+       }
+      }}
+      >Follow</div>
+      :
+      <div className="grey-btn follow-btn"
+      onClick={async ()=>{
+       try{
+        await unfollowUser(profileData._id);
+        followActions.unfollowOuter();
+        setFollowState(()=>false);
+       }catch(err){
+        
+       }
+      }}
+      >Following</div> 
+    }
 
       {/* <svg aria-label="Options" className="three-dots" 
      role="img" 
@@ -111,6 +169,7 @@ function DisownProfileActions(){
      > 
     <title>Options</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle>
     </svg> */}
+
     </>
    )
 }

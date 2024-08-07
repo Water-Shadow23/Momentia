@@ -66,7 +66,7 @@ export async function unfollowUser({
   authKey
 }){
  const url = `${baseURL}${baseUserURL}/${userId}/unfollow`;
- const request = new PatchRequest(url,null,authKey);
+ const request = new DeleteRequest(url,authKey);
 
  return request.sendToServer();
 }
