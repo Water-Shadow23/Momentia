@@ -240,3 +240,8 @@ gap: 1.7rem;
     color: var(--p-gray-light);
 }
 
+.noContent-cont{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
