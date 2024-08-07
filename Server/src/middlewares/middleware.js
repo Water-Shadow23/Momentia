@@ -4,12 +4,17 @@ const {isNumber} = require('../util');
 const {dataService} = require('../services/data');
 
 
- function checkResource(model,paramIdName){
+ function checkResource(model,paramIdName,options){
  return async (req,res)=>{
   const actions = dataService(model);
   const id = req.params[paramIdName] || req.params.id || req.user._id;
   try{
-    const record =  await actions.getById(id)
+    let record;
+    if(options?.type === 'custom'){
+     record = await actions.getByCustom({id:id});
+    }else{
+      record =  await actions.getById(id)
+    }
     if(!record){
      throw new NotFoundError('Resource not found!');
     }
