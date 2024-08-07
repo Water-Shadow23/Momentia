@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments.jsx"
 import { UseOverlay } from "../../hooks/useOverlay.jsx";
-import { overlayConstants } from "../../constants/dispatchConstants.js";
+import { errorConstants, overlayConstants } from "../../constants/dispatchConstants.js";
+import React, { useEffect, useRef, useState } from "react";
+import usePost from "../../hooks/serviceHooks/usePosts.jsx";
+import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
+import isBadRequest from "../../utils/errorHandler.js";
+import { setOuterData } from "../../utils/util.jsx";
 
 
 export default function Explore() {
@@ -18,30 +23,91 @@ export default function Explore() {
 }
 
 function ExploreBody({overlayDispatch}) {
+  
+  const {getAllPosts} = usePost();
+  const [postsData,setPostsData] = useState({});
+  const errorDispatch = useErrorBoundary();
 
+
+  useEffect(()=>{
+    (async function(){
+      try{
+        const resData = await getAllPosts(1,50);
+        setPostsData((prevData)=>{
+         return {
+           ...prevData,
+           ...resData.data
+         }
+        });
+      }catch(err){
+       if(!isBadRequest(err)){
+         errorDispatch({
+             typeAction:errorConstants.SET_ERROR,
+             error:err
+           });
+       }
+      }
+    })()
+   },[]);
+   
+   let [postCont,setPostCont] = useState([]); 
+   
+   useEffect(()=>{
+
+    if(postCont.length){
+      postCont = [];
+    }
+   
+    const posts = Object.values(postsData); 
+    if(posts.length){
+
+      for(let i = 0 ; i<posts.length;i++){
+       if(i%5 === 0){
+        postCont.push(
+        <ExploreRow key={i}>
+          <ExplorePostBox
+          overlayDispatch={overlayDispatch}
+          data={posts[i]}
+          key={posts[i].id} 
+          setOuterData={setOuterData(setPostsData)}
+          />
+        </ExploreRow>
+        )
+       }else{
+        const lastElement = postCont[postCont.length-1];
+        const newChildren = React.Children.toArray(lastElement.props.children);
+        newChildren.push(
+         <ExplorePostBox 
+         data={postsData[i]} 
+         overlayDispatch={overlayDispatch}
+         setOuterData={setOuterData(setPostsData)}
+          key={posts[i].id}
+         />
+        )
+
+        postCont[postCont.length-1] = React.cloneElement(
+          lastElement,
+          {key:lastElement.key},
+          ...newChildren
+        )
+  
+       }
+      } 
+
+    }
+
+    setPostCont(()=>[...postCont]);
+
+   },[postsData])
+  
+    
   return (
     <div className="explore-sub">
-      <ExploreRow>
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={1} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={2} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={3} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={4} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={5} />
-      </ExploreRow>
-      <ExploreRow>
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={6} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={7} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={8} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={9} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={10} />
-      </ExploreRow>
-      <ExploreRow>
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={11} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={12} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={13} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={14} />
-        <ExplorePostBox overlayDispatch={overlayDispatch} id={15} />
-      </ExploreRow>
+     {postCont.length ? 
+     postCont
+     :
+     ''   
+     }
     </div>
   )
 }
@@ -55,28 +121,28 @@ function ExploreRow({ children }) {
   )
 }
 
-function ExplorePostBox({ overlayDispatch, id }) {
+function ExplorePostBox({ overlayDispatch, data , setOuterData }) {
 
   return (
-    <Link to="" className="explore-box">
+    <Link to='' className="explore-box">
       <div className="box-in"
         onClick={(e) => {
           overlayDispatch({
             typeAction: overlayConstants.OPEN,
-            component: Comments,
+            component: Comments(data._id,setOuterData),
             typeOverlay: 'Modal'
           });
         }}
       >
-        <img src={`https://picsum.photos/1000/1000?${id}`} alt="" />
+        <img src={data.postImage} alt="" />
         <div className="explore-box-stats">
           <div className="explore-box-likes">
             <i className="fa-regular fa-heart"></i>
-            6k
+            {data.likes.length}
           </div>
           <div className="explore-box-comments">
             <i className="fa-regular fa-comment"></i>
-            1.2k
+           {data.comments}
           </div>
         </div>
       </div>
