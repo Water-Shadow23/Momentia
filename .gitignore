@@ -16,6 +16,5 @@ dist-ssr
 
 *.idea
 
-*.env
 *.todo
 home.html
