@@ -81,8 +81,8 @@ async function getProfilePosts(req,res){
         {
             path:'posts',
             model:Post,
-            limit:req.query.limit,
-            count:req.query.count   
+            // limit:req.query.limit,
+            // count:req.query.count   
         }
     );
   
@@ -95,19 +95,27 @@ async function getProfilePosts(req,res){
 }
 async function getProfileData(req,res){
     const userId = req.user._id;
-    const userData =  await userActions.getByIdAndPopulate(userId,
-        {
-        path:'posts',
-        model:Post,
-        limit:10,
-        count:1
-        }
+    const userData =  await userActions.getById(userId
     );
 
     res.status(200).json({
         code:200,
         message:"Data retrieved successfully",
-        data:userData,
+        data:{
+            id:userData.id, 
+            _id:userData._id, 
+            username:userData.username,
+            fullName:userData.fullName,
+            email:userData.email,
+            posts:userData.posts.length,
+            job:userData.job,
+            profilePhoto:userData.profilePhoto,
+            bio:userData.bio,
+            website:userData.website,
+            followers:userData.followers, 
+            following:userData.following, 
+            gender:userData.gender, 
+          },
         ok:true
     });
 }
@@ -115,13 +123,8 @@ async function getProfileData(req,res){
 
 async function getUserData(req,res){
     const userId = req.params.id;
-    const userData =  await userActions.getByIdAndPopulate(userId,
-        {
-        path:'posts',
-        model:Post,
-        limit:10,
-        count:1
-        }
+    const userData =  await userActions.getByCustom(
+        {id:userId}
     );
 
     res.status(200).json({
@@ -129,10 +132,15 @@ async function getUserData(req,res){
         message:"Data retrieved successfully",
         data:{
           id:userData.id, 
+          _id:userData._id, 
           username:userData.username,
           fullName:userData.fullName,
           email:userData.email,
-          posts:userData.posts,
+          posts:userData.posts.length,
+          job:userData.job,
+          bio:userData.bio,
+          website:userData.website,
+          profilePhoto:userData.profilePhoto,
           followers:userData.followers, 
           following:userData.following, 
           gender:userData.gender, 
@@ -143,12 +151,13 @@ async function getUserData(req,res){
 
 async function getUserPosts(req,res){
     const userId = req.params.id;
-    const userData =  await userActions.getByIdAndPopulate(userId,
+    const userData =  await userActions.getByCustomAndPopulate(
+        {id:userId},
         {
             path:'posts',
             model:Post,
-            limit:req.query.limit,
-            count:req.query.count   
+            // limit:req.query.limit,
+            // count:req.query.count   
         }
     );
   

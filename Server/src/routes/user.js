@@ -16,7 +16,8 @@ userRouter.patch('/accaunts/edit',
         "bio",
         "gender",
         "website",
-        "job"
+        "job",
+        "profilePhoto"
     )), 
     tryCatchAsync(validateRequestData(User)),    
     tryCatchAsyncEnd(editProfile)
@@ -29,18 +30,18 @@ userRouter.delete('/accaunts/delete',
 
 userRouter.get('/accaunts/posts',
     tryCatch(authPage('u')),
-    tryCatch(checkIsValidQueryParams([
-        'limit',
-        'count'
-      ])),
+    // tryCatch(checkIsValidQueryParams([
+    //     'limit',
+    //     'count'
+    //   ])),
     getProfilePosts
 );
 userRouter.get('/accaunts/saved',
     tryCatch(authPage('u')),
-    tryCatch(checkIsValidQueryParams([
-        'limit',
-        'count'
-      ])),
+    // tryCatch(checkIsValidQueryParams([
+    //     'limit',
+    //     'count'
+    //   ])),
     getProfileSavedPost   
 );
 
@@ -67,17 +68,17 @@ userRouter.delete('/accaunts/:id/unfollow',
 
 userRouter.get('/accaunts/:id',
    tryCatch(authPage('u','g')),
-   tryCatchAsync(checkResource(User)), 
+   tryCatchAsync(checkResource(User,'',{type:'custom'})), 
    tryCatchAsyncEnd(getUserData)  
 );
 
 userRouter.get('/accaunts/:id/posts',
    tryCatch(authPage('u','g')),
-   tryCatch(checkIsValidQueryParams([
-    'limit',
-    'count'
-  ])),
-   tryCatchAsync(checkResource(User)), 
+//    tryCatch(checkIsValidQueryParams([
+//     'limit',
+//     'count'
+//   ])),
+   tryCatchAsync(checkResource(User,'',{type:'custom'})), 
    tryCatchAsyncEnd(getUserPosts)  
 );
 
