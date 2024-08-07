@@ -60,10 +60,10 @@ postRouter.delete('/:id/unsave',
               
 postRouter.get('/following',
               tryCatch(authPage('u')),
-              tryCatch(checkIsValidQueryParams([
-                'limit',
-                'count'
-              ])),
+              // tryCatch(checkIsValidQueryParams([
+              //   'limit',
+              //   'count'
+              // ])),
               tryCatchAsyncEnd(getPostsFromFollowedUsers) 
 )
 postRouter.get('/:id',
@@ -74,19 +74,19 @@ postRouter.get('/:id',
 
 postRouter.get('/',
               tryCatch(authPage('u','g')),
-              tryCatch(checkIsValidQueryParams([
-                'limit',
-                'count'
-              ])),
+              // tryCatch(checkIsValidQueryParams([
+              //   'limit',
+              //   'count'
+              // ])),
               tryCatchAsyncEnd(getAllPosts) 
 )
 
 postRouter.get('/:id/likes',
   tryCatch(authPage('u')),
-  tryCatch(checkIsValidQueryParams([
-     'limit',
-     'count' 
-  ])),
+  // tryCatch(checkIsValidQueryParams([
+  //    'limit',
+  //    'count' 
+  // ])),
   tryCatchAsyncEnd(getPostLikes)
 )
 

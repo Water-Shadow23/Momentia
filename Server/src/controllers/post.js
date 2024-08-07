@@ -147,30 +147,63 @@ async function getPostData(req,res){
 };
 
 async function getAllPosts(req,res){
-   const skipValue = (req.query.count-1)*req.query.limit;
-   const limitValue = req.query.limit; 
+  //  const skipValue = (req.query.count-1)*req.query.limit;
+  //  const limitValue = req.query.limit; 
 
-   const chunkData = await dataPostActions.getByChunks({},skipValue,limitValue);
+   let postsData = await dataPostActions.getManyByCustomAndPopulate({},
+    {
+      path:'author',
+      model:User
+    }
+   );
+   
+   postsData = postsData.map((post)=>{
+    post.author = {      
+      _id:post.author._id,
+      id:post.author.id,
+      username:post.author.username,
+      saved:post.author.saved,
+      profilePhoto:post.author.profilePhoto || '',
+    }
+   return {...post}; 
+   });
       
    res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:chunkData,
+    data:postsData,
     ok:true
    });
 }
 
 async function getPostsFromFollowedUsers(req,res){
    const userData = await dataUserActions.getById(req.user._id); 
-   const skipValue = (req.body.count-1)*req.body.limit;
-   const limitValue = req.body.limit; 
+  //  const skipValue = (req.body.count-1)*req.body.limit;
+  //  const limitValue = req.body.limit; 
 
-   const chunkData = await dataPostActions.getByChunks({author:{$in:userData.following}},skipValue,limitValue);
+   let postsData = await dataPostActions.getManyByCustomAndPopulate(
+    {author:{$in:userData.following}},
+    {
+      path:'author',
+      model:User
+    }
+   )
+
+   postsData = postsData.map((post)=>{
+    post.author = {      
+      _id:post.author._id,
+      id:post.author.id,
+      username:post.author.username,
+      saved:post.author.saved,
+      profilePhoto:post.author.profilePhoto || '',
+    }
+   return {...post}; 
+   });
       
    res.status(200).json({
     code:200,
     message:"Data retrieved successfully",
-    data:chunkData,
+    data:postsData,
     ok:true
    });
 }

@@ -5,18 +5,14 @@ import * as postService from '../../services/postService.js';
 export default function usePost(){
     const { authState } = useContext(AuthContext);
 
-   async function getAllPosts(count,limit){
+   async function getAllPosts(){
     return postService.getAllPosts({
-      count,
-      limit
     });
    }
 
-   async function getPostsFromFollowedUsers(count,limit){
+   async function getPostsFromFollowedUsers(){
     return postService.getPostsFromFollowedUsers({
       authKey:authState.authKey,
-      count,
-      limit
     });
    }
 

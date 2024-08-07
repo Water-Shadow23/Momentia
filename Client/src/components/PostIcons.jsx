@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { toggleBool } from "../utils/util.js";
 import usePost from "../hooks/serviceHooks/usePosts.jsx";
 import isBadRequest from "../utils/errorHandler.js";
 import useErrorBoundary from "../hooks/UseErrorBoundary.jsx";
@@ -12,7 +11,7 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
     const {authState} = useContext(AuthContext);
     const {errorDispatch} = useErrorBoundary();
     const [isLiked,setIsLiked] = useState(()=>{
-      const WeLiked = data.likes.includes(authState.userId);
+      const WeLiked = likeActions.isLiked || data.likes.includes(authState.userId);
       if(WeLiked){
        return true;
       }else{
@@ -20,7 +19,7 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
       } 
     });
     const [isSaved,setIsSaved] = useState(()=>{
-      const WeSaved = authState.saved.includes(data._id);
+      const WeSaved = likeActions.isSaved || authState.saved.includes(data._id);
       if(WeSaved){
        return true;
       }else{
@@ -38,12 +37,12 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
            try{
             if(!isLiked){
              await likePost(data._id);
-             likeActions.addLikeOuter();
              setIsLiked(true);
+             likeActions.addLikeOuter();
             }else{
               await unlikePost(data._id);
-              likeActions.removeLikeOuter();
               setIsLiked(false);
+              likeActions.removeLikeOuter();
             }
 
            }catch(err){

@@ -6,11 +6,11 @@ const baseURL = env.API_BASE_URL;
 const basePostURL = env.API_BASE_RECORD_URL;
 
 export async function getAllPosts({
-  count = 1,
-  limit = 10,
+  // count = 1,
+  // limit = 10,
 
 }){
-  const url = `${baseURL}${basePostURL}?count=${count}&limit=${limit}`;
+  const url = `${baseURL}${basePostURL}`;
   const request = new GetRequest(url);
   
   return request.sendToServer();
@@ -18,10 +18,10 @@ export async function getAllPosts({
 
 export async function getPostsFromFollowedUsers({
   authKey,
-  count = 1, 
-  limit = 10,
+  // count = 1, 
+  // limit = 10,
 }){
- const url = `${baseURL}${basePostURL}/following?count=${count}&limit=${limit}`; 
+ const url = `${baseURL}${basePostURL}/following`; 
  const request = new GetRequest(url,authKey);
  
  return request.sendToServer();

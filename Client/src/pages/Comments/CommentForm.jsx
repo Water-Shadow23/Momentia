@@ -36,6 +36,8 @@ export default  function CommentForm(props){
        const commentResData = await createComment(props.postId,normalisedData);
        if(props.hasOwnProperty('addComment')){
           props.addComment(commentResData.data);
+       }else if(props.hasOwnProperty('addCommentCount')){
+        props.addCommentCount();
        }
        inputField.current.value = '';   
       }catch(err){

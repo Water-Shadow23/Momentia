@@ -32,7 +32,7 @@ function ExploreBody({overlayDispatch}) {
   useEffect(()=>{
     (async function(){
       try{
-        const resData = await getAllPosts(1,50);
+        const resData = await getAllPosts();
         setPostsData((prevData)=>{
          return {
            ...prevData,
