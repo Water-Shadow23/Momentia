@@ -38,7 +38,7 @@ export function NavigationLink({
 }
 
 export function  NavigationOptions({
-  hContent,options,children
+  hContent,options,children,authActions
 }){ 
 
   const [activeState,setActiveState] = useState({
@@ -52,7 +52,7 @@ export function  NavigationOptions({
          className={`htext-cont ${activeState.key === hContent? 'hactive' : ''}`}
          onClick={(e)=>{
           setDivActive()
-          options.eventHandler(e,setActiveState)
+          options.eventHandler(e,setActiveState,authActions)
          }}   
         >
           <div className='link-box'> 

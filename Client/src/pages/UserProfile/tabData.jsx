@@ -4,6 +4,8 @@ export const tabs = [
     {
      key:'posts',
      location:'/accaunts',
+     UserLocation:'/:userId',
+     private:false,
      className:(activeKey)=>(`profile-box-head ${activeKey === 'posts' ? 'profile-box-active' : ''}`), 
      children:(
       <>
@@ -14,6 +16,7 @@ export const tabs = [
     },
     {
     key:'saved',
+    private:true,
     location:'/accaunts/saved',
     className:(activeKey)=>(`profile-box-head ${activeKey === 'saved' ? 'profile-box-active' : ''}`),  
     children:(

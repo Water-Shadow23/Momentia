@@ -1,13 +1,16 @@
+import { useContext } from "react";
 import SettingsDialog from "../../../components/SettingsDialog.jsx";
 import { overlayConstants } from "../../../constants/dispatchConstants.js";
 import { UseOverlay } from "../../../hooks/useOverlay.jsx";
 import CreatePost from "../../../pages/CreatePost/CreatePost.jsx";
+import { AuthContext } from "../../../context/AuthContext.jsx";
 
 
 export default function NavData(data){
      
      const {overlayDispatch,overlayState} = UseOverlay();
-      
+     const {authState} = useContext(AuthContext);
+
      const navi = [
         {
           props:{
@@ -51,7 +54,7 @@ export default function NavData(data){
           }, 
           icon:
             <div className='profile-icon'>
-              <img className="icon" src={data.profileImg || ""} alt="Profile Photo" />
+              <img className="icon" src={authState?.profilePhoto || ""} alt="Profile Photo" />
             </div>,
             
         },
@@ -65,13 +68,13 @@ export default function NavData(data){
             isLinkTo:false
             },
             options:{
-              eventHandler:(e,setActiveState)=>{
+              eventHandler:(e,setActiveState,authActions)=>{
              
                 if(!overlayState.isOpen){
 
                   overlayDispatch({
                     typeAction:overlayConstants.OPEN,
-                    component:SettingsDialog(setActiveState),
+                    component:SettingsDialog(setActiveState,authActions),
                     typeOverlay:'Dialog',
                     destination:'header' 
                   });
