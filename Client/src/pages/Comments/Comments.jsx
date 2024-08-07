@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import PostIcons from "../../components/PostIcons.jsx";
-import Comment from "./Comment.jsx";
+import {Comment, CommentCaption} from "./Comment.jsx";
 import CommentForm from "./CommentForm.jsx";
 import usePost from "../../hooks/serviceHooks/usePosts.jsx";
 import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
@@ -59,6 +59,21 @@ export default function Comments(postId,setOuterData){
               setOuterData.addLikePlus(postId,authState.userId);
           }
       }
+      function addCommentLike(comId){
+        setPostData((preData)=>{
+         const comment =  preData.comments.find(com=>com._id===comId);
+         comment.likes.push(authState.userId);
+         return {...preData} 
+         } 
+        )
+      }  
+      function removeCommentLike(comId){
+        setPostData((preData)=>{
+          const comment =  preData.comments.find(com=>com._id===comId);
+          comment.likes = comment.likes.filter(like=>like!==authState.userId);
+          return {...preData} 
+        });
+      }
 
       function removeLikeOuter(){
         setPostData((preData)=>{
@@ -107,9 +122,19 @@ export default function Comments(postId,setOuterData){
            </div>
            
            <div className="comments">
-    
+           {postData.caption && 
+           <CommentCaption data={{
+            author:postData.author,
+            caption:postData.caption
+           }} /> 
+           }
            {postData.comments.map(commentData=>{
-            return <Comment data={commentData} key={commentData._id}/>
+            return <Comment data={commentData}  key={commentData._id}
+            likeActions={{
+              addCommentLike,
+              removeCommentLike,
+            }}
+            />
            })}
              
            </div>
