@@ -10,7 +10,9 @@ function expressConfig(app){
        headers:'Content-Type, Auth-Key',
        methods:'*' 
     }))
-    app.use(express.json());
+    app.use(express.json({
+        limit:'100mb'
+    }));
     app.use('/api/v1',router);
 }
 

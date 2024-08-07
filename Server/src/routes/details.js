@@ -9,10 +9,6 @@ const detailsRouter = Router();
 
 detailsRouter.get('/:id/comments',
     tryCatch(authPage('u')),
-    tryCatch(checkIsValidQueryParams([
-       'limit',
-       'count' 
-    ])),
     tryCatchAsyncEnd(getComments)
 );
 detailsRouter.post('/:id/comments/create',

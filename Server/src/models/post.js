@@ -12,9 +12,8 @@ const postSchema = new Schema({
     type:SchemaTypes.ObjectId
  },
  postImage:{
-  required:false,
-  ref:"Image",
-  type:SchemaTypes.ObjectId,
+  required:true, 
+  type:String,
  },
  caption:{
     type:String,
@@ -24,6 +23,10 @@ const postSchema = new Schema({
     type:[SchemaTypes.ObjectId],
     ref:"User",
     default:[]
+ },
+ comments:{
+  type:Number,
+  default:0
  },
  hashTags:{
    type:[String],

@@ -1,7 +1,10 @@
 const {Comment} = require('../models/comment'); 
+const { Post } = require('../models/post');
+const { User } = require('../models/user');
 const {dataService} = require('../services/data');
 
 const commentActions = dataService(Comment);
+const postActions = dataService(Post);
 
 async function createComment(req,res){
   const resourceId = req.params.id;
@@ -11,7 +14,21 @@ async function createComment(req,res){
    post:resourceId, 
    ...req.body, 
   };
-  const newComment = await commentActions.createRecord(data); 
+  const newComment = await commentActions.createRecordAndPopulate(data,{
+    path:'author',
+    model:User
+  });
+
+  newComment.author = {
+    _id:newComment.author._id,
+    id:newComment.author.id,
+    username:newComment.author.username,
+    profilePhoto:newComment.author.profilePhoto || '',
+  }
+
+  const post = await postActions.getByIdRaw(resourceId);
+  post.comments = post.comments + 1;
+  await post.save();
   
   res.status(201).json({
     code:201,
@@ -40,6 +57,9 @@ async function deleteComment(req,res){
     const commentId = req.params.comId;
      
     await commentActions.deleteRecordById(commentId); 
+    const post = await postActions.getByIdRaw(resourceId);
+    post.comments = post.comments - 1;
+    await post.save();
     
     res.status(200).json({
       code:200,
@@ -79,17 +99,31 @@ async function unlikeComment(req,res){
 async function getComments(req,res){
  const postId = req.params.id;
 
- const skip = (req.query.count-1)*req.query.limit;
- const limit = req.query.limit;
+//  const skip = (req.query.count-1)*req.query.limit;
+//  const limit = req.query.limit;
  
- const data = await commentActions.getByChunks({
+ const commentsData = await commentActions.getManyByCustomAndPopulate({
   post:postId
- },skip,limit);
+ },{
+  path:'author',
+  model:User
+ });
+ 
+ if(commentsData.length){
+  for(let comment of commentsData){
+    comment.author = {
+     _id:comment.author._id,
+     id:comment.author.id,
+     username:comment.author.username,
+     profilePhoto:comment.author.profilePhoto || '',
+   }
+  }
+ }
 
  res.status(200).json({
   code:200,
   message:"Data retrieved successfully",
-  data:data,
+  data:commentsData || [],
   ok:true
  });
 }

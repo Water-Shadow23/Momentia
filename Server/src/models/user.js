@@ -29,8 +29,7 @@ const userSchema = new Schema({
     maxLength:[150,'Bio should be max 150 characters']
  },
  profilePhoto:{
-    ref:"Image",
-    type:SchemaTypes.ObjectId 
+  type:String
  },
  posts:{
    type:[SchemaTypes.ObjectId],

@@ -57,11 +57,36 @@ async function getByCustomAndPopulate(model,filters,...properties){
   return record;
 }
 
+async function getManyByCustomAndPopulate(model,filters,...properties){
+  const queries =  model.find(filters).lean();
+  if(properties){
+   
+     for(let entry of properties){
+        queries.populate({
+          path:entry.path,
+          model:entry.model,
+        });
+      }
+    
+  }
+  const records = await queries;
+  return records;
+}
+
 async function createRecord(model,data){
  const newRecord = new model(data);
  await newRecord.save();
 
     return getById(model,newRecord._id);
+}
+async function createRecordAndPopulate(model,data,properties){
+  const newRecord = new model(data);
+  await newRecord.save();
+ 
+     return model.findOne({_id:newRecord._id})
+     .populate(properties)
+     .lean();
+     ;
 }
 async function updateRecordById(model,id,updateObj){
    const updatedRecord = await model.findByIdAndUpdate({_id:id},{$set:updateObj},{new:true}).lean();
@@ -88,7 +113,9 @@ module.exports = {
          ["getByCustom"]:bind(getByCustom,model),  
          ["getByIdAndPopulate"]:bind(getByIdAndPopulate,model),  
          ["getByCustomAndPopulate"]:bind(getByCustomAndPopulate,model),  
+         ["getManyByCustomAndPopulate"]:bind(getManyByCustomAndPopulate,model),  
          ["createRecord"]:bind(createRecord,model),  
+         ["createRecordAndPopulate"]:bind(createRecordAndPopulate,model),  
          ["updateRecordById"]:bind(updateRecordById,model),  
          ["deleteRecordById"]:bind(deleteRecordById,model),
          ["getByIdRaw"]:bind(getByIdRaw,model),

@@ -2,7 +2,7 @@ const {Router} = require('express');
 const { createPost, editPost, deletePost, likePost, unlikePost, savePost, unSavePost, getPostData, getAllPosts, getPostsFromFollowedUsers, getPostLikes } = require('../controllers/post');
 const { tryCatchAsyncEnd,tryCatch,tryCatchAsync } = require('../middlewares/errorLayer');
 const { authPage, isAuthor } = require('../middlewares/guards');
-const { validatePartialRequestBody, validateRequestData, checkResource, isLikedAlready, isSavedAlready, validateRequestBody, checkIsValidQueryParams } = require('../middlewares/middleware');
+const { validatePartialRequestBody, validateRequestData, checkResource, isLikedAlready, isSavedAlready, validateRequestBody, checkIsValidQueryParams, convertUint8toBuffer } = require('../middlewares/middleware');
 const { Post } = require('../models/post');
 const { User } = require('../models/user');
 
