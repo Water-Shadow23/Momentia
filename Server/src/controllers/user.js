@@ -107,6 +107,7 @@ async function getProfileData(req,res){
             username:userData.username,
             fullName:userData.fullName,
             email:userData.email,
+            saved:userData.saved,
             posts:userData.posts.length,
             job:userData.job,
             profilePhoto:userData.profilePhoto,

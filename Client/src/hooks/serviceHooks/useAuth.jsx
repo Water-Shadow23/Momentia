@@ -20,7 +20,9 @@ export default function useAuth(){
     authDispatch({
       typeAction:authConstants.SET_AUTH,
       userId:resData.id,
-      authKey:resData.token
+      authKey:resData.token,
+      profilePhoto:resData.data.profilePhoto || '',
+      saved:resData.data.saved || [] 
     });
   }
  
@@ -30,7 +32,9 @@ export default function useAuth(){
     authDispatch({
       typeAction:authConstants.SET_AUTH,
       userId:resData.id,
-      authKey:resData.token
+      authKey:resData.token,
+      profilePhoto:resData.data.profilePhoto || '',
+      saved:resData.data.saved || [] 
     });
   }
 

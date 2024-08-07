@@ -27,6 +27,10 @@ async function login({username,password}){
 
    return {
     token,
+    data:{
+      saved:user.saved,
+      profilePhoto:user.profilePhoto
+    },
     id:user._id
   };
 
@@ -64,6 +68,7 @@ async function register({username,password,email,fullName}){
 
     return {
       token,
+      data:newUser,
       id:newUser._id
     };
 }

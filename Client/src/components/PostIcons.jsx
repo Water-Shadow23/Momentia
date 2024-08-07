@@ -4,7 +4,7 @@ import usePost from "../hooks/serviceHooks/usePosts.jsx";
 import isBadRequest from "../utils/errorHandler.js";
 import useErrorBoundary from "../hooks/UseErrorBoundary.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { errorConstants } from "../constants/dispatchConstants.js";
+import { authConstants, errorConstants } from "../constants/dispatchConstants.js";
 
 
 
@@ -20,7 +20,7 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
       } 
     });
     const [isSaved,setIsSaved] = useState(()=>{
-      const WeSaved = data.author.saved.includes(data._id);
+      const WeSaved = authState.saved.includes(data._id);
       if(WeSaved){
        return true;
       }else{
@@ -61,12 +61,16 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
         <div className="icon-cont" onClick={async ()=>{
            try{
             if(!isSaved){
+
               await savePost(data._id);
-              saveActions.addSaved();
+              authState.saved.push(data._id);
               setIsSaved(true);
              }else{
                await unsavePost(data._id);
-               saveActions.removeSaved();
+               if(saveActions.removeOuterSave){
+                saveActions.removeOuterSave(data._id);
+               }
+               authState.saved = authState.saved.filter(id=>id!==data._id)
                setIsSaved(false);
              }
            }catch(err){

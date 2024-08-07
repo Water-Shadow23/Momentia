@@ -12,14 +12,16 @@ export function authReducer(state,action){
     isAuthenticated:true,
     userId:action.userId,
     authKey:action.authKey,
-    profilePhoto:action.profilePhoto
+    profilePhoto:action.profilePhoto,
+    saved:action.saved
    }
   case 'clearAuth':
    return {
     isAuthenticated:false,
     userId:'',
     authKey:'',
-    profilePhoto:''
+    profilePhoto:'',
+    saved:[]
    } 
    default:
     return state;

@@ -4,7 +4,7 @@ module.exports = {
   registerController:async function (req, res) {
       const fieldData = req.body;
       try {
-        const {token,id} = await register(fieldData);
+        const {token,id,data} = await register(fieldData);
         res
           .status(200)
           .json({
@@ -12,6 +12,7 @@ module.exports = {
             message: "User registered successfully",
             token: token,
             id:id,
+            data,
             ok:true
           });
       } catch (err) {
@@ -22,7 +23,7 @@ module.exports = {
   loginController:async function (req, res) {
       const fieldData = req.body;
       try {
-        const {token,id} = await login(fieldData);
+        const {token,id,data} = await login(fieldData);
         res
           .status(200)
           .json({
@@ -30,6 +31,7 @@ module.exports = {
             message: "User logged in successfully",
             token: token,
             id:id,
+            data,
             ok:true
           });
       } catch (err) {
