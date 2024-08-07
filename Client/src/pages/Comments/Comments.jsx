@@ -1,58 +1,154 @@
+import { useContext, useEffect, useState } from "react";
 import PostIcons from "../../components/PostIcons.jsx";
 import Comment from "./Comment.jsx";
 import CommentForm from "./CommentForm.jsx";
+import usePost from "../../hooks/serviceHooks/usePosts.jsx";
+import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
+import isBadRequest from "../../utils/errorHandler.js";
+import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
+import { errorConstants } from "../../constants/dispatchConstants.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 
-export default function Comments(){
+export default function Comments(postId,setOuterData){
+  
+   return function (){
+        const {getPostData} = usePost();
+        const {getComments} = usePostDetail();
+        const {errorDispatch} = useErrorBoundary();
 
-   return (
-    <div className="comments-cont" >
-      <div className="comments-in" id="modal-cont">
+      const [postData,setPostData] = useState();  
+      const {authState} = useContext(AuthContext);
 
-    <div className="comments-img-cont">
-        <img className="comments-img" src="https://picsum.photos/1000/1000?1" alt="" />
-    </div>
-    <div className="comments-sub-cont">
-        <div className="author-cont">
-            <a href="#" className="profile-circle showPreviewProfile">
-                <img src="https://static1.cbrimages.com/wordpress/wp-content/uploads/2023/02/luffy-is-grinning-in-the-movie.jpg" alt="" /> 
-            </a>
-            <a href="#" className="profile-name showPreviewProfile">
-                <p>spankedhutt</p>
-             </a>
-             <div className="three-dots">
-                ...
-             </div>
-        </div>
-        
-        <div className="comments">
+      useEffect(()=>{
+        (async function(){
+            try{
+              const postResData = await getPostData(postId);
+              const commentsResData = await getComments(postId);
+              setPostData(()=>({
+                ...postResData.data,
+                comments:commentsResData.data
+            }));
+            }catch(err){
+             if(!isBadRequest(err)){
+               errorDispatch({
+                   typeAction:errorConstants.SET_ERROR,
+                   error:err
+                 });
+             }
+            }
+          })()
+      },[]) 
 
-        <Comment />
-          
-        </div>
+      function addComment(comment){
+        setPostData((preData)=>{
+          preData.comments.push(comment);
+          return {...preData} 
+        });
+        if(setOuterData){
+            setOuterData.addCommentPlus(postId);
+        }
+      }
 
-        <div className="comments-down">
-            
-          <PostIcons />
+      function addLikeOuter(){
+        setPostData((preData)=>{
+            preData.likes.push(authState.userId);
+            return {...preData} 
+          });
+          if(setOuterData){
+              setOuterData.addLikePlus(postId,authState.userId);
+          }
+      }
 
-            <div className="stats">
-                <div className="all-likes">
-                    <p>6,634 likes</p>
-                </div>
-                <div className="time-ago">
-                    <p>10 minutes ago</p>
-                </div>
-            </div>
+      function removeLikeOuter(){
+        setPostData((preData)=>{
+            preData.likes = preData.likes.filter(like=>like!==authState.userId);
+            return {...preData} 
+          });
+          if(setOuterData){
+              setOuterData.removeLikeMinus(postId,authState.userId);
+          }
+      }
 
-            <div className="add-comment">
-                <CommentForm />
-            </div>
+      function addSaved(){
+        setPostData((preData)=>{
+            preData.author.saved.push(postId);
+            return {...preData} 
+          });
+      }
 
-        </div>
-      </div>
-      
-    </div>
+      function removeSaved(){
+        setPostData((preData)=>{
+            preData.author.saved =  preData.author.saved.filter(id=>id!==postId);
+            return {...preData} 
+          });
+      } 
+
+      return (
+        <>
+       {postData ? 
+       <div className="comments-cont" >
+         <div className="comments-in" id="modal-cont">
     
- </div>
-   ) 
+       <div className="comments-img-cont">
+           <img className="comments-img" src={postData.postImage} alt="" />
+       </div>
+       <div className="comments-sub-cont">
+           <div className="author-cont">
+               <a href="#" className="profile-circle showPreviewProfile">
+                   <img src={postData.author?.profilePhoto || ''} alt="" /> 
+               </a>
+               <a href="#" className="profile-name showPreviewProfile">
+                   <p>{postData.author.username}</p>
+                </a>
+                <div className="three-dots">
+                   ...
+                </div>
+           </div>
+           
+           <div className="comments">
+    
+           {postData.comments.map(commentData=>{
+            return <Comment data={commentData} key={commentData._id}/>
+           })}
+             
+           </div>
+    
+           <div className="comments-down">
+               
+             <PostIcons data={postData} likeActions={{
+                addLikeOuter,
+                removeLikeOuter
+             }} 
+             saveActions={{
+              addSaved,
+              removeSaved
+             }}
+             />
+    
+               <div className="stats">
+                   <div className="all-likes">
+                       <p>{postData.likes.length} likes</p>
+                   </div>
+                   {/* <div className="time-ago">
+                       <p>10 minutes ago</p>
+                   </div> */}
+               </div>
+    
+               <div className="add-comment">
+                   <CommentForm addComment={addComment} postId={postId}/>
+               </div>
+    
+           </div>
+         </div>
+         
+       </div>
+       
+    </div> 
+    : 
+    ''}
+    </>
+      ) 
+  }  
+
 }

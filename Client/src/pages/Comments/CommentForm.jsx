@@ -2,6 +2,10 @@ import { useRef } from "react";
 import useForm from "../../hooks/useForm.jsx"
 import { sanitiseData } from "../../utils/form.js";
 import { z } from 'zod';
+import isBadRequest from "../../utils/errorHandler.js";
+import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
+import { errorConstants } from "../../constants/dispatchConstants.js";
+import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
 
 const commentSchema = z.object({
   content:z.string()
@@ -9,6 +13,9 @@ const commentSchema = z.object({
 });
 
 export default  function CommentForm(props){
+   
+  const errorDispatch = useErrorBoundary();
+  const {createComment} = usePostDetail();
 
    const {
     formData,
@@ -20,10 +27,25 @@ export default  function CommentForm(props){
    },commentSchema,{
     mode:'onChange'
    });
+      
+   const inputField = useRef();
 
-    function onCommentSubmit(){
+    async function onCommentSubmit(){
       const normalisedData = sanitiseData(formData);
-      console.log(normalisedData);   
+      try{
+       const commentResData = await createComment(props.postId,normalisedData);
+       if(props.hasOwnProperty('addComment')){
+          props.addComment(commentResData.data);
+       }
+       inputField.current.value = '';   
+      }catch(err){
+        if(!isBadRequest(err)){
+          errorDispatch({
+              typeAction:errorConstants.SET_ERROR,
+              error:err
+            });
+        }
+      }   
     }
     
 
@@ -33,6 +55,7 @@ export default  function CommentForm(props){
         type="text" 
         placeholder="Add a comment..."  
         name="content"
+        ref={inputField}
         onChange={(e)=>{
           onFieldChange(e);
            
