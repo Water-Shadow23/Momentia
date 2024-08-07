@@ -1,24 +1,49 @@
 import { UseOverlay } from '../../hooks/useOverlay.jsx';
 import useImageUpload from '../../hooks/useImageUpload.jsx';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import EditForm from './Form/EditForm.jsx';
+import { AuthContext } from '../../context/AuthContext.jsx';
+import { useUser } from '../../hooks/serviceHooks/useUser.jsx';
+
 
 export default function ProfileEdit() {
      
-    //instead of directly changing the photo add overlay and do it from there
-    // const {OpenOverlay,CloseOverlay,isOpen} = UseOverlay();
+    //instead of directly changing the photo , add overlay and do it from there
+    
+    const {authState} = useContext(AuthContext);
     const [imagePreviewUrl,setImageUploadState,processFile] = useImageUpload()
-    const [imageBuffer,setImageBuffer] = useState('');
+    const [imageUrl,setImageUrl] = useState('');
+    const [profileData,setProfileData] = useState();
+    const {getData,edit} = useUser();
     
     async function handleFileChange(e){
-      const [imageUrl,imageBuffer] = await processFile(e);
-      setImageUploadState(setImageBuffer,{
+      const [imageUrl] = await processFile(e);
+      setImageUploadState(setImageUrl,{
        data:{
-        imageUrl:imageUrl,
-        imageBuffer:imageBuffer
+        imageUrl:imageUrl
        }  
       });
+      try{
+       await edit({
+        profilePhoto:imageUrl
+       });
+      }catch(err){
+
+      }
     }
+
+   useEffect(()=>{
+     if(authState.isAuthenticated){
+      (async function(){
+         try{
+          const profileResData = await getData();
+          setProfileData(()=>profileResData.data);
+         }catch(err){
+
+         }
+      })()
+     }
+   },[authState])  
 
     return (
         <>
@@ -29,10 +54,11 @@ export default function ProfileEdit() {
                 <div className="edit-head-text">
                     <p className="edit-profile-text-big">Edit profile</p>
                 </div>
+                {profileData && 
                 <div className="upload-profile-img-cont">
-
+                   
                     <div className="edit-profile-img">
-                        <img src={imagePreviewUrl} alt="" />
+                        <img src={imagePreviewUrl || profileData?.profilePhoto} alt="" />
                     </div>
                     <div className="edit-profile-username">g_manov_</div>
                        
@@ -43,8 +69,11 @@ export default function ProfileEdit() {
                     />
 
                 </div>
-               
-              <EditForm />
+                } 
+               {
+               profileData && 
+              <EditForm data={profileData}/>
+               }
 
             </div>
         </section>

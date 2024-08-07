@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Select from 'react-select';
 
 import {useForm,Controller,useWatch} from 'react-hook-form';
@@ -9,20 +9,23 @@ import { genderOptionsStyles } from '../genderOptions/optionsStyles.js'
 import { genderOptionsData } from '../genderOptions/optionsData.js';
 import {checkChanges } from "../../../utils/form.js";
 import useCharCounter from "../../../hooks/useCharCounter.jsx";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../../hooks/serviceHooks/useUser.jsx";
+
 
 
 
 
 //you can try to add field array in future to extract the input info into seperate file
-export default function EditForm() {
+export default function EditForm({data}) {
    const [isChanged,setIsChanged] = useState(false);
    const [formDefaultValues,setFormDefaultValues] = useState(
       {
-         website:'',
-         fullName:'George Manov',
-         job:'Developer',
-         bio:'I am hundred',
-         gender:'preferNotToSay'
+         website:data.website || '',
+         fullName:data.fullName || '',
+         job:data.job || '',
+         bio:data.bio || '',
+         gender:data.gender
       } 
    );  
    const {
@@ -39,12 +42,13 @@ export default function EditForm() {
       }); 
       
    const [chars,charCounter] = useCharCounter(defaultValues.bio.length);
+   const navigate = useNavigate();
    const values =  useWatch({
      control:control,
     });
    
    useEffect(()=>{
-     const changed = checkChanges(defaultValues,values);
+     const changed = checkChanges(formDefaultValues,values);
        if(changed){
         setIsChanged(true);
        }else if(!changed || Object.keys(errors).length){
@@ -53,13 +57,20 @@ export default function EditForm() {
        
       },[values,errors]); 
     
-    
+   const {edit} = useUser();   
    async function onSubmit(data){
-     console.log(data);
-   }
+     try{
+       await edit(data);
+       navigate('/accaunts');
+     }catch(err){
 
+     }
+   }
    
    return (
+      <>
+      {data
+      &&
       <form className="edit-profile-form" onSubmit={handleSubmit(onSubmit)}>
 
          <div className="form-group">
@@ -167,5 +178,7 @@ export default function EditForm() {
          disabled={!isChanged || Object.keys(errors).length}
          />
       </form>
+         }
+         </>
    )
 }
