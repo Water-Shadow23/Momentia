@@ -13,7 +13,9 @@ export default class Request{
       this.url = url;
       this.options.method = method || '';
       if(method!=='GET' &&  method!=='HEAD'){
-        this.options.body = JSON.stringify(body) || '';
+        if(body){
+          this.options.body = JSON.stringify(body);
+        }
       }
       if(authKey){
         this.options.headers['Auth-Key'] = authKey;

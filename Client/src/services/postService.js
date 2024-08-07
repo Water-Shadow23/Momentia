@@ -13,7 +13,7 @@ export async function getAllPosts({
   const url = `${baseURL}${basePostURL}?count=${count}&limit=${limit}`;
   const request = new GetRequest(url);
   
-  await request.sendToServer();
+  return request.sendToServer();
 }
 
 export async function getPostsFromFollowedUsers({
@@ -22,7 +22,7 @@ export async function getPostsFromFollowedUsers({
   limit = 10,
 }){
  const url = `${baseURL}${basePostURL}/following?count=${count}&limit=${limit}`; 
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
  
  return request.sendToServer();
 }
@@ -32,7 +32,7 @@ export async function getPostData({
   postId
 }){
  const url = `${baseURL}${basePostURL}/${postId}`;  
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
  
  return request.sendToServer();
 }
@@ -73,7 +73,7 @@ export async function likePost({
   postId  
 }){
  const url = `${baseURL}${basePostURL}/${postId}/like`;   
- const request = new PatchRequest(url,null,authKey);
+ const request = new PatchRequest(url,'',authKey);
  
  return request.sendToServer();
 }
@@ -83,7 +83,7 @@ export async function unlikePost({
   postId  
 }){
  const url = `${baseURL}${basePostURL}/${postId}/unlike`;
- const request = new PatchRequest(url,null,authKey);
+ const request = new DeleteRequest(url,authKey);
  
  return request.sendToServer();
 }
@@ -103,7 +103,7 @@ export async function unsavePost({
   postId  
 }){
 const url = `${baseURL}${basePostURL}/${postId}/unsave`;
-const request = new PatchRequest(url,null,authKey);
+const request = new DeleteRequest(url,authKey);
  
 return request.sendToServer();
 }

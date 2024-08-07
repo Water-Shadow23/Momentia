@@ -67,10 +67,10 @@ export async function unlikeComment({
 
 export async function getComments({
  postId,
- authKey
+ authKey,
 }){
  const url = `${baseCommentUrl(postId)}`;
- const request = new GetRequest(url,null,authKey);
+ const request = new GetRequest(url,authKey);
 
  return request.sendToServer();
 }
