@@ -70,3 +70,22 @@ export async function unfollowUser({
 
  return request.sendToServer();
 }
+
+
+export async function getUserData({
+ userId
+}){
+ const url = `${baseURL}${baseUserURL}/${userId}`;
+ const request = new GetRequest(url);
+
+ return request.sendToServer();
+}
+
+export async function getUserPosts({
+  userId
+}){
+  const url = `${baseURL}${baseUserURL}/${userId}/posts`;
+  const request = new GetRequest(url);
+ 
+  return request.sendToServer();  
+}
