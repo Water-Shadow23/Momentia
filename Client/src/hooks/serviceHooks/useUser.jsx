@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
 import * as userService from "../../services/userService.js";
 
 
@@ -7,11 +7,15 @@ export function useUser(){
     const {authState} = useContext(AuthContext);
     
      async function getOwnPosts(){
-       return userService.getAccauntOwnPosts({authKey:authState.authKey});
+       return userService.getAccauntOwnPosts({
+        authKey:authState.authKey
+       });
     }
 
     async function getSavedPosts(){
-        return userService.getAccauntSavedPosts({authKey:authState.authKey});  
+        return userService.getAccauntSavedPosts({
+                authKey:authState.authKey
+            });  
     }
 
     async function getData(){
@@ -45,6 +49,18 @@ export function useUser(){
      });  
     }
 
+    async function getUserData(userId){
+        return userService.getUserData({
+            userId:userId
+         }); 
+    }
+
+    async function getUserPosts(userId){
+        return userService.getUserPosts({
+            userId:userId
+         });   
+    }
+
     return {
         getOwnPosts,
         getSavedPosts,
@@ -52,6 +68,8 @@ export function useUser(){
         edit,
         terminate,
         followUser,
-        unfollowUser
+        unfollowUser,
+        getUserData,
+        getUserPosts
     }
 }

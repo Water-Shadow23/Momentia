@@ -23,7 +23,8 @@ export default function usePersistedAuthState(){
               authDispatch({
                typeAction:authConstants.SET_AUTH,
                userId:accauntData.data._id,
-               authKey:cookies.token
+               authKey:cookies.token,
+               profilePhoto:accauntData.data.profilePhoto || ''
               });
                
              }catch(err){

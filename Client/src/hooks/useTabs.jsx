@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 
 
@@ -9,9 +9,14 @@ export default function useTabs(listOfTabs){
       location:''  
     });
     const location = useLocation();
+    const params = useParams();
+    const userId = params.userId;
     
     useEffect(()=>{
     const tab = listOfTabs.find(tab=>{
+      if(userId){
+       return tab.hasOwnProperty('UserLocation') 
+      } 
       return tab.location === location.pathname
      });
     setActiveTab({
