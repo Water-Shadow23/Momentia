@@ -30,9 +30,13 @@ import PostViewUpload from "./PostViewUpload.jsx";
                <p className="blue" id="next-btn"
                 onClick={()=>{
                   setPostData((preData)=>{
-                    const newData = Object.assign({...preData},formData);
-                    console.log(newData);
-                    return newData
+                    const newData = Object.assign({...preData.data},formData);
+                    return {
+                      data:{
+                        ...newData,
+                      },
+                      isShared:true, 
+                    }
                   });
                   
                 }}
