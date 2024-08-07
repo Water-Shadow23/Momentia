@@ -9,7 +9,7 @@ export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
           <section className="home-modal" onClick={closeModal}>      
              {ComponentToRender ? 
              <ComponentToRender
-                
+             overlayDispatch={overlayDispatch}
              /> : ''}
 
              <div className="close-popup-cross" onClick={(e)=>{
