@@ -47,8 +47,8 @@ async function getByCustomAndPopulate(model,filters,...properties){
       path:entry.path,
       model:entry.model,
       options:{
-        limit:entry.limit,
-        skip:(entry.count-1)*entry.limit
+        limit:entry.limit || 0,
+        skip:(entry.count-1)*entry.limit || 0
       }
     });
     }
