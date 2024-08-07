@@ -1,7 +1,8 @@
 import {Link} from 'react-router-dom'
-import { overlayConstants } from '../constants/dispatchConstants.js'
+import {  overlayConstants } from '../constants/dispatchConstants.js'
 
-export default function SettingsDialog(setActiveState){
+export default function SettingsDialog(setActiveState,authActions){
+   
   
   return ({overlayDispatch}) =>{
     return(
@@ -40,7 +41,10 @@ export default function SettingsDialog(setActiveState){
                 <p>Switch accounts</p>
               </div>     */}
 
-              <div className="settings-box link-box">
+              <div className="settings-box link-box" 
+              onClick={()=>{
+                authActions.logoutUser();
+              }}>
                 <p>Log out</p>
               </div>    
             </div>
