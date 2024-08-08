@@ -100,7 +100,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
        </div>
        <div className="comments-sub-cont">
            <div className="author-cont">
-               <Link to={isAuthor.current ? '/accaunts' : `/${postData.author.id}` }
+               <Link to={isAuthor.current ? '/accaunts' : `/u/${postData.author.id}` }
                className="profile-circle showPreviewProfile"
                onClick={()=>{
                 overlayDispatch({
@@ -110,7 +110,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                >
                    <img src={postData.author?.profilePhoto || ''} alt="" /> 
                </Link>
-               <Link to={isAuthor.current ? '/accaunts' : `/${postData.author.id}` } 
+               <Link to={isAuthor.current ? '/accaunts' : `/u/${postData.author.id}` } 
                className="profile-name showPreviewProfile"
                onClick={()=>{
                 overlayDispatch({

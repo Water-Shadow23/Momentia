@@ -210,9 +210,9 @@ gap: 1.7rem;
     grid-template-columns: repeat(3,1fr);
     gap: .5rem;
     margin-bottom: .5rem;
-    height: 20rem;
 }
 .profile-box{
+    height: 20rem;
     flex: 1;
 }
 .profile-box img{

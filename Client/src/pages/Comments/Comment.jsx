@@ -26,7 +26,7 @@ export function Comment({data,likeActions,overlayDispatch}){
     return (
         <div className="comment">
         <div className="profile-circle">
-          <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+          <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
           className="showPreviewProfile"
           onClick={()=>{
             overlayDispatch({
@@ -39,7 +39,7 @@ export function Comment({data,likeActions,overlayDispatch}){
         </div>
         <div className="comment-cont">
           <div className="comment-text">
-           <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+           <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
            className="comment-profile-name showPreviewProfile"
            onClick={()=>{
             overlayDispatch({
@@ -102,7 +102,7 @@ export function CommentCaption({data,overlayDispatch}){
         marginBottom:'.8rem'
       }}>
         <div className="profile-circle">
-          <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` } 
+          <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
           className="showPreviewProfile"
           onClick={()=>{
             overlayDispatch({
@@ -115,7 +115,7 @@ export function CommentCaption({data,overlayDispatch}){
         </div>
         <div className="comment-cont">
           <div className="comment-text">
-           <Link to={isAuthor ? '/accaunts' : `/${data.author.id}` }
+           <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` }
            className="comment-profile-name showPreviewProfile"
            onClick={()=>{
             overlayDispatch({

@@ -30,7 +30,7 @@ export default function Router() {
              <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
              
              {authState.isAuthenticated &&
-             <Route path='/:userId' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
+             <Route path='/u/:userId' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
                 <Route path="" element={<ErrorBoundary> <UserPosts /> </ErrorBoundary>} />
              </Route>
              }
@@ -50,17 +50,23 @@ export default function Router() {
              <Route path='/accaunts/edit' element={<ErrorBoundary> <ProfileEdit /> </ErrorBoundary>} />
              }
              
-             <Route path="*" element={<NotFound />} />
              
+             <Route path="*" element={<NotFound />} />
             </Route>
+
+            {!authState.isAuthenticated  &&
+            <Route element={<Auth />}>
+             <Route path="/login" element={<ErrorBoundary> <Login /> </ErrorBoundary>} />
+             
+             <Route path="/register" element={<ErrorBoundary> <Register /> </ErrorBoundary>} />
+              
+            </Route>
+           
+            }
            </Route>  
 
-            <Route element={<Auth />}>
+          
 
-             <Route path="/login" element={<ErrorBoundary> <Login /> </ErrorBoundary>} />
-             <Route path="/register" element={<ErrorBoundary> <Register /> </ErrorBoundary>} />
-
-            </Route>
 
            
           </Routes>
