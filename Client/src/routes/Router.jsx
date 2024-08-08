@@ -12,10 +12,13 @@ import NotFound from "../pages/NotFound/NotFound.jsx";
 import { ProfileOwnPosts, ProfileSavedPosts, UserPosts } from "../pages/UserProfile/ProfileParts/ProfilePosts.jsx";
 import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
 import PersistedAuthState from "../components/PersistedAuthState.jsx";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 
 
 export default function Router() {
+   const {authState} = useContext(AuthContext);
 
   return (
     <>
@@ -25,20 +28,28 @@ export default function Router() {
             <Route element={<Main />}>
               
              <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
-
+             
+             {authState.isAuthenticated &&
              <Route path='/:userId' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
                 <Route path="" element={<ErrorBoundary> <UserPosts /> </ErrorBoundary>} />
              </Route>
+             }
 
+            {authState.isAuthenticated && 
              <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
+            }
 
+             {authState.isAuthenticated && 
              <Route path='/accaunts' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
                  <Route path="" element={<ProfileOwnPosts />} />
                  <Route path="saved" element={<ProfileSavedPosts />} />
              </Route>
+             }
 
+             {authState.isAuthenticated && 
              <Route path='/accaunts/edit' element={<ErrorBoundary> <ProfileEdit /> </ErrorBoundary>} />
-
+             }
+             
              <Route path="*" element={<NotFound />} />
              
             </Route>

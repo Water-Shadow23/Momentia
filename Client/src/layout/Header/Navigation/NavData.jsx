@@ -13,6 +13,7 @@ export default function NavData(data){
 
      const navi = [
         {
+          private:false,
           props:{
             hContent:'Home',
             link:'/',
@@ -21,7 +22,8 @@ export default function NavData(data){
            <i className="fa-solid fa-house icon"></i>,
            
         },
-        {  
+        {
+          private:true,  
           props:{
             hContent:'Explore',
             link:'/explore',
@@ -31,6 +33,7 @@ export default function NavData(data){
                 
         },
         {
+          private:true,
           props:{
             hContent:'Create',
             options:{
@@ -48,6 +51,7 @@ export default function NavData(data){
           
         },
         {
+          private:true,
           props:{
             hContent:'Profile',
             link:`/accaunts`,
@@ -62,6 +66,7 @@ export default function NavData(data){
       
      const naviOptions = [
         {
+          private:true,
           props:{
             hContent:'More',
             linkData:{

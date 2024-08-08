@@ -33,6 +33,22 @@ export default function HomePosts(){
           }
          }
        })()
+     }else if(authState.isAuthenticated === false){
+      (async function(){
+        try{
+          const resData = await getAllPosts();
+          setPostsData(()=>{
+           return [...resData.data]
+          });
+        }catch(err){
+         if(!isBadRequest(err)){
+           errorDispatch({
+               typeAction:errorConstants.SET_ERROR,
+               error:err
+             });
+         }
+        }
+      })()
      } 
      
     },[authState.isAuthenticated]);

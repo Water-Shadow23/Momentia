@@ -1,6 +1,6 @@
 
 export const initialState= {
-    isAuthenticated:false,
+    isAuthenticated:undefined,
     userId:'',
     authKey:''
 }

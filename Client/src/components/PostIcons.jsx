@@ -4,12 +4,14 @@ import isBadRequest from "../utils/errorHandler.js";
 import useErrorBoundary from "../hooks/UseErrorBoundary.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { authConstants, errorConstants } from "../constants/dispatchConstants.js";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function PostIcons({OpenComment,likeActions,saveActions,data}){
     const {authState} = useContext(AuthContext);
     const {errorDispatch} = useErrorBoundary();
+    const navigate = useNavigate();
     const [isLiked,setIsLiked] = useState(()=>{
       const WeLiked = likeActions.isLiked || data.likes.includes(authState.userId);
       if(WeLiked){
@@ -34,30 +36,42 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
   
         <div className="icon-cont" 
         onClick={async ()=>{
-           try{
-            if(!isLiked){
-             await likePost(data._id);
-             setIsLiked(true);
-             likeActions.addLikeOuter();
-            }else{
-              await unlikePost(data._id);
-              setIsLiked(false);
-              likeActions.removeLikeOuter();
+          if(authState.isAuthenticated){
+            try{
+             if(!isLiked){
+              await likePost(data._id);
+              setIsLiked(true);
+              likeActions.addLikeOuter();
+             }else{
+               await unlikePost(data._id);
+               setIsLiked(false);
+               likeActions.removeLikeOuter();
+             }
+ 
+            }catch(err){
+              
             }
-
-           }catch(err){
-             
-           }
+          }else{
+           navigate('/login');
+          }
         }}
         >
           <i className={`fa-regular fa-heart icon icon-post ${isLiked && 'liked'}`}></i>
         </div>
         <div className="icon-cont" 
-        onClick={OpenComment}
+        onClick={()=>{
+          if(authState.isAuthenticated){
+           OpenComment(); 
+          }
+          else{
+            navigate('/login')
+          } 
+        }}
         >
           <i className="fa-regular fa-comment icon icon-post"></i>
         </div>
         <div className="icon-cont" onClick={async ()=>{
+          if(authState.isAuthenticated){
            try{
             if(!isSaved){
 
@@ -75,6 +89,9 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
            }catch(err){
            
            }
+          }else{
+            navigate('/login');
+          }
         }}
 
         >

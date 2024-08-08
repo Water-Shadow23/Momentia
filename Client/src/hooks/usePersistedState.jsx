@@ -41,6 +41,10 @@ export default function usePersistedAuthState(){
                 // lets pretend that this doesn't exist :).
               }
              }
+        }else if(!cookies.token && !authState.isAuthenticated){
+          authDispatch({
+            typeAction:authConstants.CLEAR_AUTH
+           });
         }
         })();
 

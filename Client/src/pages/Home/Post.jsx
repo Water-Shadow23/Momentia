@@ -1,4 +1,4 @@
- import { Link } from "react-router-dom"
+ import { Link, useNavigate } from "react-router-dom"
 import { UseOverlay } from "../../hooks/useOverlay.jsx"
 import Comments from "../Comments/Comments.jsx";
 import CommentForm from "../Comments/CommentForm.jsx";
@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
     
     const {overlayDispatch} = UseOverlay();
     const {authState} = useContext(AuthContext)
-    
+    const navigate = useNavigate();
     const [postState,setPostState] = useState({
       likes:data.likes.length,
       comments:data.comments || 0,
@@ -88,10 +88,10 @@ import { AuthContext } from "../../context/AuthContext.jsx";
       <div className="post">   
   
       <div className="post-options">
-         <Link to={`/${data.author.id}`} className="profile showPreviewProfile">
+         <Link to={`/${authState.isAuthenticated ? data.author.id : 'login'}`} className="profile showPreviewProfile">
             <img src={data.author.profilePhoto} alt="" />        
          </Link>
-         <Link to={`/${data.author.id}`} className="profile-name showPreviewProfile">
+         <Link to={`/${authState.isAuthenticated ? data.author.id : 'login'}`} className="profile-name showPreviewProfile">
             <p>{data.author.username}</p>
             {/* <span className="time-ago">3d</span> */}
          </Link>
@@ -118,9 +118,15 @@ import { AuthContext } from "../../context/AuthContext.jsx";
              <p>{postState.likes} likes</p>
           </div>
           {postState.comments!==0 &&
-          <Link  to='' 
+          <Link  to={!authState.isAuthenticated ? '/login' : ''} 
           className="all-comments"
-          onClick={OpenComment} 
+          onClick={()=>{
+            if(authState.isAuthenticated){
+             OpenComment();
+            }else{
+             navigate('/login');
+            }
+          }} 
           >
             <p>View all {postState.comments} comments</p>
           </Link>
@@ -128,12 +134,13 @@ import { AuthContext } from "../../context/AuthContext.jsx";
       </div>
       
       <div className="add-comment">
+       {authState.isAuthenticated &&  
         <CommentForm options={{
          isInitialSubmitBtnHidden:true
       }}
       postId={data._id}     
       addCommentCount={actions.addOuterComment} 
-        />
+        />}
       </div>
   
       </div>
