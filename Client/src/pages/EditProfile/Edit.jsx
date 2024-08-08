@@ -60,7 +60,7 @@ export default function ProfileEdit() {
                     <div className="edit-profile-img">
                         <img src={imagePreviewUrl || profileData?.profilePhoto} alt="" />
                     </div>
-                    <div className="edit-profile-username">g_manov_</div>
+                    <div className="edit-profile-username">{profileData.username}</div>
                        
                      <label htmlFor="file-profile" className="blue-btn">Change Photo</label> 
                     <input type='file' id='file-profile' 
