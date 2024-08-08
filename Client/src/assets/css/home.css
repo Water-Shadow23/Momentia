@@ -170,6 +170,7 @@ header{
   width: calc(100% - var(--nav-big-width));
   margin-inline-start:var(--nav-big-width);
   padding-inline: 4rem;
+  position: relative;
 }
 
 .home .home-sub{
@@ -181,6 +182,9 @@ header{
 
 .variant-cont{
   border-bottom: 1.2px solid var(--border-clr-grey);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .variant-cont .variant {
   padding-bottom: 1.2rem;  
@@ -500,4 +504,16 @@ svg.three-dots:active{
 .box-in{
     width: 100%;
     height: 100%;
+}
+
+.auth-btns{
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+    justify-content: flex-end;
+    font-size: var(--fs-medium);
+}
+
+.auth-btn{
+    
 }

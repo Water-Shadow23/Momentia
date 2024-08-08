@@ -205,9 +205,9 @@ gap: 1.7rem;
 }
 
 .profile-post-row{
-    display: flex;
+    display: grid;
     width: 100%;
-    flex-direction: row;
+    grid-template-columns: repeat(3,1fr);
     gap: .5rem;
     margin-bottom: .5rem;
     height: 20rem;
