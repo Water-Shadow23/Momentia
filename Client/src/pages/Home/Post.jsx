@@ -88,10 +88,10 @@ import { AuthContext } from "../../context/AuthContext.jsx";
       <div className="post">   
   
       <div className="post-options">
-         <Link to={`/${authState.isAuthenticated ? data.author.id : 'login'}`} className="profile showPreviewProfile">
+         <Link to={`/${authState.isAuthenticated ? `u/${data.author.id}` : 'login'}`} className="profile showPreviewProfile">
             <img src={data.author.profilePhoto} alt="" />        
          </Link>
-         <Link to={`/${authState.isAuthenticated ? data.author.id : 'login'}`} className="profile-name showPreviewProfile">
+         <Link to={`/${authState.isAuthenticated ? `u/${data.author.id}` : 'login'}`} className="profile-name showPreviewProfile">
             <p>{data.author.username}</p>
             {/* <span className="time-ago">3d</span> */}
          </Link>
