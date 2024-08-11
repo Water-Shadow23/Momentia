@@ -59,7 +59,7 @@ export default function ProfileDataHead(){
 
    return (
     <>
-    
+    {profileData &&
     <div className="profile-data-cont">
                     
     <div className="profile-photo-cont">
@@ -98,7 +98,7 @@ export default function ProfileDataHead(){
     </div> 
     
   </div>
-  
+  }
   </>
    ) 
 }

@@ -6,7 +6,7 @@ import { overlayConstants } from "../../constants/dispatchConstants.js";
 
 
 
-export function Comment({data,likeActions,overlayDispatch}){
+export function Comment({data,likeActions,overlayDispatch,type}){
     const {authState} = useContext(AuthContext);
 
     const [isLiked,setIsLiked] = useState(()=>{
@@ -25,13 +25,16 @@ export function Comment({data,likeActions,overlayDispatch}){
 
     return (
         <div className="comment">
+         <div className="comment-in-cont">
         <div className="profile-circle">
           <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
           className="showPreviewProfile"
           onClick={()=>{
+            if(type==='overlay'){
             overlayDispatch({
               typeAction:overlayConstants.CLOSE
             })
+          }
           }}
           >
               <img src={data.author.profilePhoto || ''} alt="" /> 
@@ -42,9 +45,11 @@ export function Comment({data,likeActions,overlayDispatch}){
            <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
            className="comment-profile-name showPreviewProfile"
            onClick={()=>{
-            overlayDispatch({
-              typeAction:overlayConstants.CLOSE
-            })
+            if(type==='overlay'){
+              overlayDispatch({
+                typeAction:overlayConstants.CLOSE
+              })
+            } 
           }}
            >
             {data.author.username}
@@ -65,7 +70,8 @@ export function Comment({data,likeActions,overlayDispatch}){
            <p className="comment-option">Reply</p>
           </div> */}
           </div>
-        </div>
+        </div>    
+          </div> 
 
          <div className="comment-like">
           <i 
@@ -91,7 +97,7 @@ export function Comment({data,likeActions,overlayDispatch}){
     )
 }
 
-export function CommentCaption({data,overlayDispatch}){
+export function CommentCaption({data,overlayDispatch,type}){
   const {authState} = useContext(AuthContext);
   
   const isAuthor = data.author._id === authState.userId;
@@ -105,9 +111,11 @@ export function CommentCaption({data,overlayDispatch}){
           <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` } 
           className="showPreviewProfile"
           onClick={()=>{
+            if(type==='overlay'){
             overlayDispatch({
               typeAction:overlayConstants.CLOSE
             })
+          }
           }}
           >
               <img src={data.author.profilePhoto || ''} alt="" /> 
@@ -118,9 +126,11 @@ export function CommentCaption({data,overlayDispatch}){
            <Link to={isAuthor ? '/accaunts' : `/u/${data.author.id}` }
            className="comment-profile-name showPreviewProfile"
            onClick={()=>{
+            if(type==='overlay'){
             overlayDispatch({
               typeAction:overlayConstants.CLOSE
             })
+          }
           }}   
            >
             {data.author.username}

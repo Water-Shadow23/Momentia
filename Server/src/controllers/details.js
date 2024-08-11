@@ -26,7 +26,7 @@ async function createComment(req,res){
     profilePhoto:newComment.author.profilePhoto || '',
   }
 
-  const post = await postActions.getByIdRaw(resourceId);
+  const post = await postActions.getByCustomRaw({id:resourceId});
   post.comments = post.comments + 1;
   await post.save();
   

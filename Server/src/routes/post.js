@@ -68,7 +68,7 @@ postRouter.get('/following',
 )
 postRouter.get('/:id',
               tryCatch(authPage('u')),
-              tryCatchAsync(checkResource(Post)),
+              tryCatchAsync(checkResource(Post,undefined,{type:'custom'})),
               tryCatchAsyncEnd(getPostData) 
 );
 

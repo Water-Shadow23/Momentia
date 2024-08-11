@@ -347,6 +347,9 @@ svg.three-dots:active{
 .post-info{
     margin-top: .65rem;
 }
+.all-comments{
+    cursor: pointer;
+}
 .all-comments p {
  font-size: var(--fs-small);
  color: var(--p-gray-light);

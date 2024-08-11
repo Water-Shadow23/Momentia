@@ -29,7 +29,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
               isAuthor.current = postResData.data.author._id === authState.userId;
               setPostData(()=>({
                 ...postResData.data,
-                comments:commentsResData.data
+                comments:commentsResData.data 
             }));
             }catch(err){
              if(!isBadRequest(err)){
@@ -93,7 +93,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
         <>
        {postData ? 
        <div className="comments-cont" >
-         <div className="comments-in" id="modal-cont">
+         <div className="comments-in" id="modal-cont" data-navigate={-1}>
     
        <div className="comments-img-cont">
            <img className="comments-img" src={postData.postImage} alt="" />

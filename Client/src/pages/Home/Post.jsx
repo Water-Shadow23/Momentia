@@ -22,9 +22,10 @@ import { AuthContext } from "../../context/AuthContext.jsx";
     function OpenComment(){
       overlayDispatch({
         typeAction:overlayConstants.OPEN,
-        component:Comments(data._id,setOuterData(),overlayDispatch),
+        component:Comments(data.id,setOuterData(),overlayDispatch),
         typeOverlay:'Modal' 
       });
+     history.pushState({},'',`/p/${data.id}`);
     }
 
     function setOuterData(){
@@ -118,7 +119,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
              <p>{postState.likes} likes</p>
           </div>
           {postState.comments!==0 &&
-          <Link  to={!authState.isAuthenticated ? '/login' : ''} 
+          <div 
           className="all-comments"
           onClick={()=>{
             if(authState.isAuthenticated){
@@ -129,7 +130,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
           }} 
           >
             <p>View all {postState.comments} comments</p>
-          </Link>
+          </div>
          }
       </div>
       
@@ -138,8 +139,8 @@ import { AuthContext } from "../../context/AuthContext.jsx";
         <CommentForm options={{
          isInitialSubmitBtnHidden:true
       }}
-      postId={data._id}     
-      addCommentCount={actions.addOuterComment} 
+      postId={data.id}     
+      addPostComment={actions.addOuterComment} 
         />}
       </div>
   

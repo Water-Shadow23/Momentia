@@ -5,6 +5,7 @@ import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
 import isBadRequest from "../../utils/errorHandler.js";
 import { errorConstants } from "../../constants/dispatchConstants.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { setOuterData } from "../../utils/util.jsx";
 
 
 export default function HomePosts(){
@@ -14,7 +15,6 @@ export default function HomePosts(){
   const {errorDispatch} = useErrorBoundary();
 
   const {authState} = useContext(AuthContext);
-  const isMounted = useRef(false);
 
     useEffect(()=>{ 
      if(authState.isAuthenticated){
@@ -52,7 +52,6 @@ export default function HomePosts(){
      } 
      
     },[authState.isAuthenticated]);
-    
 
     return (
       <div className="home-posts-cont">

@@ -6,7 +6,7 @@
         setData((preDatas)=>{
 
           for(let key in preDatas){
-            if(preDatas[key]._id === postId){
+            if(preDatas[key].id === postId){
               preDatas[key].comments = preDatas[key].comments + 1;
               break;
             }
@@ -18,7 +18,7 @@
     function addOuterLike(postId,userId){
       setData((preDatas)=>{
         for(let key in preDatas){
-          if(preDatas[key]._id === postId){
+          if(preDatas[key].id === postId){
             preDatas[key].likes.push(userId);
             break;
           }
@@ -29,7 +29,7 @@
     function removeOuterLike(postId,userId){
       setData((preDatas)=>{
         for(let key in preDatas){
-          if(preDatas[key]._id === postId){
+          if(preDatas[key].id === postId){
             preDatas[key].likes = preDatas[key].likes.filter((id)=>id!==userId);
             break;
           }

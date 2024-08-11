@@ -125,7 +125,9 @@ async function unSavePost(req,res){
 async function getPostData(req,res){
   const resourceId = req.params.id;
 
-  const postData = await dataPostActions.getByIdAndPopulate(resourceId,{
+  const postData = await dataPostActions.getByCustomAndPopulate({
+    id:resourceId
+  },{
     path:'author',
     model:User
   });

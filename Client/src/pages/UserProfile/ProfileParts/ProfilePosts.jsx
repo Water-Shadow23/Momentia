@@ -69,28 +69,28 @@ export  function ProfilePostsBody() {
     function setOuterUserProfileData(){
         function addOuterComment(postId){
          setPosts((preData)=>{
-          const post = preData.find((post)=>post._id===postId);
+          const post = preData.find((post)=>post.id===postId);
           post.comments = post.comments + 1;   
           return [...preData]  
          });
         }
         function addOuterLike(postId,userId){
          setPosts((preData)=>{
-           const post = preData.find((post)=>post._id===postId);
+           const post = preData.find((post)=>post.id===postId);
            post.likes.push(userId);
            return [...preData]     
          });
         }
         function removeOuterComment(postId){
             setPosts((preData)=>{
-                const post = preData.find((post)=>post._id===postId);
+                const post = preData.find((post)=>post.id===postId);
                 post.comments = post.comments - 1;
                 return [...preData]     
               });
         }
         function removeOuterLike(postId,userId){
             setPosts((preData)=>{
-                const post = preData.find((post)=>post._id===postId);
+                const post = preData.find((post)=>post.id===postId);
                 post.likes = post.likes.filter(likeId=>likeId!==userId);   
                 return [...preData] 
                });
@@ -361,9 +361,10 @@ function ProfilePost({ data , setOuterUserProfileData , overlayDispatch }) {
 
               overlayDispatch({
                 typeAction:overlayConstants.OPEN,
-                component:Comments(data._id,setOuterUserProfileData,overlayDispatch),
+                component:Comments(data.id,setOuterUserProfileData,overlayDispatch),
                 typeOverlay:'Modal' 
               })  
+              history.pushState({},'',`/p/${data.id}`);
             }}
             >
                 <img src={data.postImage} alt="" />
@@ -375,7 +376,7 @@ function ProfilePost({ data , setOuterUserProfileData , overlayDispatch }) {
                     </div>
                     <div className="profile-post-comments post-stat">
                         <i className="fa-regular fa-comment"></i>
-                        {data.comments}
+                        {data.comments || 0}
                     </div>
                 </div>
             </div>

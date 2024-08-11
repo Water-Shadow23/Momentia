@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { overlayConstants } from "../../constants/dispatchConstants.js";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
 
+      const navigate = useNavigate();
+      
        return(
           <>
           {isOpen ? 
@@ -12,13 +15,9 @@ export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
              overlayDispatch={overlayDispatch}
              /> : ''}
 
-             <div className="close-popup-cross" onClick={(e)=>{
-              if(e.target.closest('.close-popup-cros')){
-                overlayDispatch({
-                 typeAction:overlayConstants.CLOSE
-                })
-              }
-             }}>
+             <div className="close-popup-cross" 
+              
+             >
                <i className="fa-solid fa-xmark"></i>
              </div>
           </section> : ''}
@@ -29,7 +28,16 @@ export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
           if(!e.target.closest('#modal-cont')){
            overlayDispatch({
             typeAction:overlayConstants.CLOSE
-           })
+           });
+           const modalCont = document.querySelector('#modal-cont');
+           if(modalCont.dataset.navigate){
+              const ToNumber = Number(modalCont.dataset.navigate);
+              if(ToNumber){
+                 navigate(ToNumber);
+              }else{
+               navigate(modalCont.dataset.navigate)
+              }
+           }
           }    
        } 
 }

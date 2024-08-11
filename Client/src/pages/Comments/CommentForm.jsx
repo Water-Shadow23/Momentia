@@ -33,12 +33,10 @@ export default  function CommentForm(props){
     async function onCommentSubmit(){
       const normalisedData = sanitiseData(formData);
       try{
-       const commentResData = await createComment(props.postId,normalisedData);
-       if(props.hasOwnProperty('addComment')){
-          props.addComment(commentResData.data);
-       }else if(props.hasOwnProperty('addCommentCount')){
-        props.addCommentCount();
-       }
+        const commentResData = await createComment(props.postId,normalisedData);
+        if(props.hasOwnProperty('addPostComment')){
+           props.addPostComment(commentResData.data);
+        }
        inputField.current.value = '';   
       }catch(err){
         if(!isBadRequest(err)){

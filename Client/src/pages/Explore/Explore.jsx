@@ -84,7 +84,7 @@ function ExploreBody({overlayDispatch}) {
           key={posts[i].id}
          />
         )
-
+        
         postCont[postCont.length-1] = React.cloneElement(
           lastElement,
           {key:lastElement.key},
@@ -124,12 +124,13 @@ function ExploreRow({ children }) {
 function ExplorePostBox({ overlayDispatch, data , setOuterData }) {
 
   return (
-    <Link to='' className="explore-box">
+    <div className="explore-box">
       <div className="box-in"
         onClick={(e) => {
+          history.pushState({},'',`/p/${data.id}`);
           overlayDispatch({
             typeAction: overlayConstants.OPEN,
-            component: Comments(data._id,setOuterData,overlayDispatch),
+            component: Comments(data.id,setOuterData,overlayDispatch),
             typeOverlay: 'Modal'
           });
         }}
@@ -142,10 +143,10 @@ function ExplorePostBox({ overlayDispatch, data , setOuterData }) {
           </div>
           <div className="explore-box-comments">
             <i className="fa-regular fa-comment"></i>
-           {data.comments}
+           {data.comments || 0}
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

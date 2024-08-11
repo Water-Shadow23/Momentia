@@ -16,7 +16,6 @@ export function overlayReducer(state,action){
       typeOverlay:action.typeOverlay,
       destinationToRender:action.destination || '',
     };
-
     case 'closeOverlay':
     return {
       isOpen:false,

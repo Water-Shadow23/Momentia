@@ -14,6 +14,7 @@ import { ErrorBoundary } from "../context/ErrorBoundaryContext.jsx";
 import PersistedAuthState from "../components/PersistedAuthState.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
+import PostDetail from "../pages/Comments/PostDetail.jsx";
 
 
 
@@ -35,6 +36,10 @@ export default function Router() {
              </Route>
              }
 
+            {authState.isAuthenticated &&
+             <Route path='/p/:id' element={<ErrorBoundary> <PostDetail /> </ErrorBoundary>} />
+            }
+             
             {authState.isAuthenticated && 
              <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
             }
@@ -52,23 +57,20 @@ export default function Router() {
              
              
              <Route path="*" element={<NotFound />} />
+                        
             </Route>
 
-            {!authState.isAuthenticated  &&
+            {authState.isAuthenticated===false  ?
             <Route element={<Auth />}>
              <Route path="/login" element={<ErrorBoundary> <Login /> </ErrorBoundary>} />
              
              <Route path="/register" element={<ErrorBoundary> <Register /> </ErrorBoundary>} />
               
             </Route>
-           
+            : '' 
             }
            </Route>  
 
-          
-
-
-           
           </Routes>
     </>
   )

@@ -16,6 +16,10 @@ async function getByIdRaw(model,id){
 async function getByCustom(model,filters){
     return model.findOne(filters).lean();
 }
+async function getByCustomRaw(model,filters){
+  return model.findOne(filters);
+}
+
 async function getByIdProperty(model,id,name){
     const record = await model.findById(id).lean();
     const propertie = record[name];
@@ -111,6 +115,7 @@ module.exports = {
          ["getByChunks"]:bind(getByChunks,model),
          ["getById"]:bind(getById,model),  
          ["getByCustom"]:bind(getByCustom,model),  
+         ["getByCustomRaw"]:bind(getByCustomRaw,model),  
          ["getByIdAndPopulate"]:bind(getByIdAndPopulate,model),  
          ["getByCustomAndPopulate"]:bind(getByCustomAndPopulate,model),  
          ["getManyByCustomAndPopulate"]:bind(getManyByCustomAndPopulate,model),  

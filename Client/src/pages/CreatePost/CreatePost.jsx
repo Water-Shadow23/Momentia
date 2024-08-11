@@ -51,7 +51,7 @@ export default function CreatePost({overlayDispatch}) {
         overlayDispatch({
           typeAction:overlayConstants.CLOSE
         })
-        navigate('/explore'); 
+        navigate('/accaunts'); 
        }catch(err){
          if(!isBadRequest(err)){
            errorDispatch({
