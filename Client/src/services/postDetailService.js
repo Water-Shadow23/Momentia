@@ -38,7 +38,7 @@ export async function deleteComment({
   authKey,  
 }){
  const url = `${baseCommentUrl(postId)}/${commentId}/delete`;
- const request = new DeleteRequest(url,null,authKey);
+ const request = new DeleteRequest(url,authKey);
 
  return request.sendToServer();
 }

@@ -57,7 +57,9 @@ async function deleteComment(req,res){
     const commentId = req.params.comId;
      
     await commentActions.deleteRecordById(commentId); 
-    const post = await postActions.getByIdRaw(resourceId);
+    const post = await postActions.getByCustomRaw({
+      id:resourceId
+    });
     post.comments = post.comments - 1;
     await post.save();
     

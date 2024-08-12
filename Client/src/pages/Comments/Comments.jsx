@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import PostIcons from "../../components/PostIcons.jsx";
 import {Comment, CommentCaption} from "./Comment.jsx";
 import CommentForm from "./CommentForm.jsx";
@@ -88,7 +88,27 @@ export default function Comments(postId,setOuterData,overlayDispatch){
           }
       }
 
-           
+      function removeComment(comId){
+        setPostData((preData)=>{
+          preData.comments = preData.comments.filter(com=>com._id!==comId);
+          return {...preData} 
+        });
+        if(setOuterData){
+          setOuterData.removeOuterComment(postId);
+        }
+      }
+      
+      function editComment(comId,newContent){
+        setPostData((preData)=>{
+          const comment = preData.comments.find(com=>com._id===comId);
+          comment.content = newContent;
+        
+          return {...preData} 
+        });
+      }
+
+      const inputRef = useRef();
+    
       return (
         <>
        {postData ? 
@@ -140,7 +160,12 @@ export default function Comments(postId,setOuterData,overlayDispatch){
               addCommentLike,
               removeCommentLike,
             }}
+            commentActions={{
+              removeComment,
+              editComment
+            }}
             overlayDispatch={overlayDispatch}
+            inputRef={inputRef}
             />
            })}
              
@@ -167,7 +192,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                </div>
     
                <div className="add-comment">
-                   <CommentForm addComment={addComment} postId={postId}/>
+                   <CommentForm addPostComment={addComment} postId={postData.id} />
                </div>
     
            </div>

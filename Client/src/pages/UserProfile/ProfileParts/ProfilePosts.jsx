@@ -102,13 +102,22 @@ export  function ProfilePostsBody() {
                 return [...preData]  
                });
         }
+
+        function removeOuterComment(postId){
+          setPosts((preData)=>{
+            const post = preData.find((post)=>post.id===postId);
+            post.comments = post.comments - 1;   
+            return [...preData] 
+           });
+        }
        
        return {
         addOuterComment,
         addOuterLike,
         removeOuterComment,
         removeOuterLike,
-        removeOuterSave
+        removeOuterSave,
+        
        } 
     } 
 

@@ -28,7 +28,7 @@ export default  function CommentForm(props){
     mode:'onChange'
    });
       
-   const inputField = useRef();
+   
 
     async function onCommentSubmit(){
       const normalisedData = sanitiseData(formData);
@@ -55,7 +55,7 @@ export default  function CommentForm(props){
         type="text" 
         placeholder="Add a comment..."  
         name="content"
-        ref={inputField}
+        
         onChange={(e)=>{
           onFieldChange(e);
            

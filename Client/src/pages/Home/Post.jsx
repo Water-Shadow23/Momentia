@@ -49,6 +49,12 @@ import { AuthContext } from "../../context/AuthContext.jsx";
             return {...preData} 
           });
       }
+      function removeOuterComment(){
+         setPostState((preData)=>{
+            preData.comments = preData.comments - 1;
+            return {...preData} 
+          });
+      }
       function removeOuterLike(){
          setPostState((preData)=>{
             preData.likes = preData.likes - 1;
@@ -69,7 +75,8 @@ import { AuthContext } from "../../context/AuthContext.jsx";
          addOuterSave,
          removeOuterSave,
          addOuterComment,
-         removeOuterLike
+         removeOuterLike,
+         removeOuterComment
       }
     }
      

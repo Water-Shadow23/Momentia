@@ -37,11 +37,23 @@
        return {...preDatas}
       });
     }
+    function removeOuterComment(postId){
+      setData((preData)=>{
+        for(let key in preData){
+          if(preData[key].id === postId){
+            preData[key].comments = preData[key].comments - 1;
+            break;
+          }
+        }
+       return {...preData}
+        });
+  }
 
     return {
       addOuterComment,
       addOuterLike,
-      removeOuterLike
+      removeOuterLike,
+      removeOuterComment
     }
   }
 
