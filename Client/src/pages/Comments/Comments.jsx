@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import {  useContext, useEffect, useRef, useState } from "react";
 import PostIcons from "../../components/PostIcons.jsx";
 import {Comment, CommentCaption} from "./Comment.jsx";
 import CommentForm from "./CommentForm.jsx";
@@ -9,17 +9,22 @@ import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
 import { errorConstants, overlayConstants } from "../../constants/dispatchConstants.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { Link } from "react-router-dom";
+import { OuterBuilder } from "../../utils/Outer.jsx";
 
-export default function Comments(postId,setOuterData,overlayDispatch){
     
-   return function (){
+   export default function Comments (postId,outerActions,postIconsContext){
+
+     return function({overlayDispatch}){
+
         const {getPostData} = usePost();
         const {getComments} = usePostDetail();
-        const {errorDispatch} = useErrorBoundary();
+        // const {errorDispatch} = useErrorBoundary();
 
       const [postData,setPostData] = useState();  
       const {authState} = useContext(AuthContext);
       const isAuthor = useRef(false);
+
+      const [iconsState,setIconsState] = useState()
 
       useEffect(()=>{
         (async function(){
@@ -31,36 +36,71 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                 ...postResData.data,
                 comments:commentsResData.data 
             }));
+            setIconsState(()=>{
+              const isLiked =   postResData.data.likes.includes(authState.userId);
+              const isSaved = authState.saved.includes(postResData.data._id);
+              
+             
+                return {
+                  isLiked,
+                  isSaved
+                }
+            })
             }catch(err){
              if(!isBadRequest(err)){
-               errorDispatch({
-                   typeAction:errorConstants.SET_ERROR,
-                   error:err
-                 });
+              //  errorDispatch({
+              //      typeAction:errorConstants.SET_ERROR,
+              //      error:err
+              //    });
              }
             }
           })()
       },[]) 
       
+      const outerPostActions = OuterBuilder(setPostData)
 
-      function addComment(comment){
-        setPostData((preData)=>{
-          preData.comments.push(comment);
-          return {...preData} 
-        });
-        if(setOuterData){
-            setOuterData.addOuterComment(postId);
+      
+      function addLike(){
+        outerPostActions.addOuterLike(authState.userId);
+        if(outerActions){
+          outerActions.addOuterLike(authState.userId);
         }
+        }
+      function removeLike(){
+          outerPostActions.removeOuterLike(authState.userId);
+          if(outerActions){
+            outerActions.removeOuterLike(authState.userId);
+          }
       }
 
-      function addLikeOuter(){
-        setPostData((preData)=>{
-            preData.likes.push(authState.userId);
+      function removeSave(){
+        if(outerActions.removeOuterSave){
+          if(outerActions.removeOuterSave.length){
+            outerActions.removeOuterSave(postId);
+          }
+        }
+      }
+        
+
+      function addComment(comment){
+          setPostData((preData)=>{
+            preData.comments.push(comment);
             return {...preData} 
           });
-          if(setOuterData){
-              setOuterData.addOuterLike(postId,authState.userId);
+          if(outerActions){
+            outerActions.addOuterComment();
           }
+          
+      }
+      function removeComment(comId){
+        setPostData((preData)=>{
+          preData.comments = preData.comments.filter(com=>com._id!==comId);
+          return {...preData} 
+        });
+        if(outerActions){
+          outerActions.removeOuterComment();
+        } 
+        
       }
       function addCommentLike(comId){
         setPostData((preData)=>{
@@ -69,7 +109,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
          return {...preData} 
          } 
         )
-      }  
+      } 
       function removeCommentLike(comId){
         setPostData((preData)=>{
           const comment =  preData.comments.find(com=>com._id===comId);
@@ -78,26 +118,6 @@ export default function Comments(postId,setOuterData,overlayDispatch){
         });
       }
 
-      function removeLikeOuter(){
-        setPostData((preData)=>{
-            preData.likes = preData.likes.filter(like=>like!==authState.userId);
-            return {...preData} 
-          });
-          if(setOuterData){
-              setOuterData.removeOuterLike(postId,authState.userId);
-          }
-      }
-
-      function removeComment(comId){
-        setPostData((preData)=>{
-          preData.comments = preData.comments.filter(com=>com._id!==comId);
-          return {...preData} 
-        });
-        if(setOuterData){
-          setOuterData.removeOuterComment(postId);
-        }
-      }
-      
       function editComment(comId,newContent){
         setPostData((preData)=>{
           const comment = preData.comments.find(com=>com._id===comId);
@@ -123,9 +143,11 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                <Link to={isAuthor.current ? '/accaunts' : `/u/${postData.author.id}` }
                className="profile-circle showPreviewProfile"
                onClick={()=>{
-                overlayDispatch({
-                  typeAction:overlayConstants.CLOSE
-                })
+               if(overlayDispatch){
+                 overlayDispatch({
+                   typeAction:overlayConstants.CLOSE
+                 })
+               } 
               }}
                >
                    <img src={postData.author?.profilePhoto || ''} alt="" /> 
@@ -133,9 +155,11 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                <Link to={isAuthor.current ? '/accaunts' : `/u/${postData.author.id}` } 
                className="profile-name showPreviewProfile"
                onClick={()=>{
-                overlayDispatch({
-                  typeAction:overlayConstants.CLOSE
-                })
+                if(overlayDispatch){
+                  overlayDispatch({
+                    typeAction:overlayConstants.CLOSE
+                  })
+                }
               }}
                >
                    <p>{postData.author.username}</p>
@@ -146,7 +170,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
            </div>
            
            <div className="comments">
-           {postData.caption && 
+           {postData.caption &&
            <CommentCaption data={{
             author:postData.author,
             caption:postData.caption
@@ -165,7 +189,6 @@ export default function Comments(postId,setOuterData,overlayDispatch){
               editComment
             }}
             overlayDispatch={overlayDispatch}
-            inputRef={inputRef}
             />
            })}
              
@@ -173,15 +196,17 @@ export default function Comments(postId,setOuterData,overlayDispatch){
     
            <div className="comments-down">
                
-             <PostIcons data={postData} likeActions={{
-                addLikeOuter,
-                removeLikeOuter
+             <PostIcons outerActions={{
+                addOuterLike:addLike,
+                removeOuterLike:removeLike,
+                removeOuterSave:removeSave,
              }}
-             saveActions={{
-              removeOuterSave:setOuterData?.removeOuterSave
-             }}
+             postId={postData._id}
+             postIconsContext={postIconsContext}
+             iconsUpperState={{iconsState,setIconsState}}
+             isOverlay={true}
              />
-    
+               
                <div className="stats">
                    <div className="all-likes">
                        <p>{postData.likes.length} likes</p>
@@ -192,7 +217,7 @@ export default function Comments(postId,setOuterData,overlayDispatch){
                </div>
     
                <div className="add-comment">
-                   <CommentForm addPostComment={addComment} postId={postData.id} />
+                   <CommentForm addComment={addComment} postId={postData.id} />
                </div>
     
            </div>
@@ -205,6 +230,6 @@ export default function Comments(postId,setOuterData,overlayDispatch){
     ''}
     </>
       ) 
-  }  
+    }
+  }
 
-}

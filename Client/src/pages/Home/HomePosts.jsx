@@ -5,7 +5,8 @@ import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
 import isBadRequest from "../../utils/errorHandler.js";
 import { errorConstants } from "../../constants/dispatchConstants.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import { setOuterData } from "../../utils/util.jsx";
+import { PostIconsProvider } from "../../context/PostIconsContext.jsx";
+// import { setOuterData } from "../../utils/util.jsx";
 
 
 export default function HomePosts(){
@@ -57,10 +58,13 @@ export default function HomePosts(){
       <div className="home-posts-cont">
        {postsData &&
        postsData.map(post=>{
-        return <Post 
-        data={post}  
-        key={post._id}
-        /> 
+        return (
+        <PostIconsProvider key={post._id}>
+          <Post 
+          data={post}  
+          />
+        </PostIconsProvider>   
+        ) 
        })
       }
       </div>

@@ -10,6 +10,7 @@ import { AuthContext } from "../../../context/AuthContext.jsx";
 import ProfileUserHeadTabs from "../CommonParts/ProfileUserHeadTabs.jsx";
 import { overlayConstants } from "../../../constants/dispatchConstants.js";
 import { NoPosts, NoSaved } from "../NoContent.jsx";
+import { OuterBuilder } from "../../../utils/Outer.jsx";
 
 export  function ProfilePostsBody() {
      
@@ -22,6 +23,9 @@ export  function ProfilePostsBody() {
     const [activeTab, setActive] = useTabs(tabs);
     const [posts,setPosts] = useState();
     const {getOwnPosts,getSavedPosts,getUserPosts} = useUser();
+
+    const outerActions = OuterBuilder(setPosts);
+    const removeOuterSave = outerActions.removeOuterSave;
 
     useEffect(()=>{
      if(authState.isAuthenticated){
@@ -65,61 +69,7 @@ export  function ProfilePostsBody() {
        }
      }   
     },[activeTab,authState])
-
-    function setOuterUserProfileData(){
-        function addOuterComment(postId){
-         setPosts((preData)=>{
-          const post = preData.find((post)=>post.id===postId);
-          post.comments = post.comments + 1;   
-          return [...preData]  
-         });
-        }
-        function addOuterLike(postId,userId){
-         setPosts((preData)=>{
-           const post = preData.find((post)=>post.id===postId);
-           post.likes.push(userId);
-           return [...preData]     
-         });
-        }
-        function removeOuterComment(postId){
-            setPosts((preData)=>{
-                const post = preData.find((post)=>post.id===postId);
-                post.comments = post.comments - 1;
-                return [...preData]     
-              });
-        }
-        function removeOuterLike(postId,userId){
-            setPosts((preData)=>{
-                const post = preData.find((post)=>post.id===postId);
-                post.likes = post.likes.filter(likeId=>likeId!==userId);   
-                return [...preData] 
-               });
-        }
-
-        function removeOuterSave(postId){
-            setPosts((preData)=>{
-                preData = preData.filter(post=>post._id!==postId);   
-                return [...preData]  
-               });
-        }
-
-        function removeOuterComment(postId){
-          setPosts((preData)=>{
-            const post = preData.find((post)=>post.id===postId);
-            post.comments = post.comments - 1;   
-            return [...preData] 
-           });
-        }
-       
-       return {
-        addOuterComment,
-        addOuterLike,
-        removeOuterComment,
-        removeOuterLike,
-        removeOuterSave,
-        
-       } 
-    } 
+ 
 
     return (
       <>
@@ -140,7 +90,7 @@ export  function ProfilePostsBody() {
                <Outlet 
                context={{
                    postsData:posts,
-                   setOuterUserProfileData:setOuterUserProfileData()
+                   removeOuterSave
                 }}
                 />
             </div>
@@ -152,7 +102,7 @@ export  function ProfilePostsBody() {
 }
 
 export function ProfileSavedPosts() {
-    const {postsData,setOuterUserProfileData} = useOutletContext();
+    const {postsData,removeOuterSave} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
     let [postCont,setPostCont] = useState([]); 
     useEffect(()=>{
@@ -171,8 +121,8 @@ export function ProfileSavedPosts() {
               <ProfilePost
               overlayDispatch={overlayDispatch}
               data={postsData[i]}
-              key={postsData[i].id} 
-              setOuterUserProfileData={setOuterUserProfileData}
+              key={postsData[i].id}
+              removeOuterSave={removeOuterSave} 
               />
             </ProfilePostRow>
             )
@@ -183,8 +133,8 @@ export function ProfileSavedPosts() {
              <ProfilePost 
              data={postsData[i]} 
              overlayDispatch={overlayDispatch}
-             setOuterUserProfileData={setOuterUserProfileData}
               key={postsData[i].id}
+              removeOuterSave={removeOuterSave}
              />
             )
     
@@ -218,11 +168,9 @@ export function ProfileSavedPosts() {
     )
 }
 
-
 export function ProfileOwnPosts() {
-    const {postsData,setOuterUserProfileData} = useOutletContext();
+    const {postsData} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
-    delete setOuterUserProfileData.removeOuterSave ;
     let [postCont,setPostCont] = useState([]); 
     useEffect(()=>{
         
@@ -240,7 +188,6 @@ export function ProfileOwnPosts() {
               overlayDispatch={overlayDispatch}
               data={postsData[i]}
               key={postsData[i].id} 
-              setOuterUserProfileData={setOuterUserProfileData}
               />
             </ProfilePostRow>
             )
@@ -251,7 +198,6 @@ export function ProfileOwnPosts() {
              <ProfilePost 
              data={postsData[i]} 
              overlayDispatch={overlayDispatch}
-             setOuterUserProfileData={setOuterUserProfileData}
               key={postsData[i].id}
              />
             )
@@ -287,9 +233,8 @@ export function ProfileOwnPosts() {
 }
 
 export function UserPosts(){
-  const {postsData,setOuterUserProfileData} = useOutletContext();
+  const {postsData} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
-    delete setOuterUserProfileData.removeOuterSave ;
     let [postCont,setPostCont] = useState([]); 
     useEffect(()=>{
         
@@ -307,7 +252,6 @@ export function UserPosts(){
               overlayDispatch={overlayDispatch}
               data={postsData[i]}
               key={postsData[i].id} 
-              setOuterUserProfileData={setOuterUserProfileData}
               />
             </ProfilePostRow>
             )
@@ -318,7 +262,6 @@ export function UserPosts(){
              <ProfilePost 
              data={postsData[i]} 
              overlayDispatch={overlayDispatch}
-             setOuterUserProfileData={setOuterUserProfileData}
               key={postsData[i].id}
              />
             )
@@ -361,7 +304,13 @@ function ProfilePostRow({ children }) {
     )
 }
 
-function ProfilePost({ data , setOuterUserProfileData , overlayDispatch }) {
+function ProfilePost({ data  , overlayDispatch , removeOuterSave }) {
+   
+   const [profilePostData,setProfilePostData] = useState(data);
+   const outerActions = OuterBuilder(setProfilePostData)
+   if(removeOuterSave){
+     outerActions.removeOuterSave = removeOuterSave
+   }
 
     return (
         <div  className="profile-box">
@@ -370,22 +319,22 @@ function ProfilePost({ data , setOuterUserProfileData , overlayDispatch }) {
 
               overlayDispatch({
                 typeAction:overlayConstants.OPEN,
-                component:Comments(data.id,setOuterUserProfileData,overlayDispatch),
+                component:Comments(profilePostData.id,outerActions),
                 typeOverlay:'Modal' 
               })  
-              history.pushState({},'',`/p/${data.id}`);
+              history.pushState({},'',`/p/${profilePostData.id}`);
             }}
             >
-                <img src={data.postImage} alt="" />
+                <img src={profilePostData.postImage} alt="" />
 
                 <div className="profile-post-stats">
                     <div className="profile-post-likes post-stat">
                         <i className="fa-regular fa-heart"></i>
-                        {data.likes.length}
+                        {profilePostData.likes.length}
                     </div>
                     <div className="profile-post-comments post-stat">
                         <i className="fa-regular fa-comment"></i>
-                        {data.comments || 0}
+                        {profilePostData.comments || 0}
                     </div>
                 </div>
             </div>

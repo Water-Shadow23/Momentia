@@ -15,3 +15,10 @@ export const overlayConstants = {
   CLOSE:'closeOverlay',
   OPEN:'openOverlay'
 }
+
+export const postIconsConstants = {
+  LIKE:'like',
+  UNLIKE:'unlike',
+  SAVE:'save',
+  UNSAVE:'unsave'
+}

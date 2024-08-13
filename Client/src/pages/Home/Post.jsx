@@ -3,95 +3,52 @@ import { UseOverlay } from "../../hooks/useOverlay.jsx"
 import Comments from "../Comments/Comments.jsx";
 import CommentForm from "../Comments/CommentForm.jsx";
 import PostIcons from "../../components/PostIcons.jsx";
-import { overlayConstants } from "../../constants/dispatchConstants.js";
-import { useContext, useState } from "react";
+import { overlayConstants, postIconsConstants } from "../../constants/dispatchConstants.js";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { OuterBuilder } from "../../utils/Outer.jsx";
+import { PostIconsContext } from "../../context/PostIconsContext.jsx";
  
  export default function Post({data}){
     
     const {overlayDispatch} = UseOverlay();
+    const {postIconsState,postIconsDispatch} = useContext(PostIconsContext);
     const {authState} = useContext(AuthContext)
     const navigate = useNavigate();
+
     const [postState,setPostState] = useState({
-      likes:data.likes.length,
-      comments:data.comments || 0,
-      isLiked:data.likes.includes(authState.userId),
-      isSaved:authState.saved.includes(data._id)
+      likes:data.likes,
+      comments:data.comments || 0
     })
+    
+    useEffect(()=>{
+     postIconsDispatch({
+      typeAction:'setState',
+      data:{
+         isLiked:data.likes.includes(authState.userId),
+         isSaved:authState.saved.includes(data._id)
+      }
+      });
+   },[]);
+    
+    
+    const OuterActions = OuterBuilder(setPostState);
+    delete OuterActions.removeOuterSave
    
     function OpenComment(){
       overlayDispatch({
         typeAction:overlayConstants.OPEN,
-        component:Comments(data.id,setOuterData(),overlayDispatch),
+        component:(Comments(
+         data.id,
+         OuterActions,
+         {postIconsState,postIconsDispatch}
+       )),
         typeOverlay:'Modal' 
       });
      history.pushState({},'',`/p/${data.id}`);
     }
-
-    function setOuterData(){
-      
-      function addOuterLike(){
-         setPostState((preData)=>{
-           preData.likes = preData.likes + 1;
-           preData.isLiked = true;
-           return {...preData} 
-         });
-      }
-      function addOuterSave(){
-         setPostState((preData)=>{
-            preData.isSaved = true;
-            return {...preData} 
-          });
-      }
-      function addOuterComment(){
-         setPostState((preData)=>{
-            preData.comments = preData.comments + 1;
-            return {...preData} 
-          });
-      }
-      function removeOuterComment(){
-         setPostState((preData)=>{
-            preData.comments = preData.comments - 1;
-            return {...preData} 
-          });
-      }
-      function removeOuterLike(){
-         setPostState((preData)=>{
-            preData.likes = preData.likes - 1;
-            preData.isLiked = false;
-            return {...preData} 
-          });
-      }
-
-      function removeOuterSave(){
-         setPostState((preData)=>{
-            preData.isSaved = false;
-            return {...preData} 
-          });
-      }
-
-      return {
-         addOuterLike,
-         addOuterSave,
-         removeOuterSave,
-         addOuterComment,
-         removeOuterLike,
-         removeOuterComment
-      }
-    }
-     
-    const actions = setOuterData();
-    const likeActions = {
-      addLikeOuter:actions.addOuterLike,
-      removeLikeOuter:actions.removeOuterLike,
-      isLiked:postState.isLiked
-    }
-    const saveActions = {
-      addLikeOuter:actions.addOuterSave,
-      removeLikeOuter:actions.removeOuterSave,
-      isSaved:postState.isSaved
-    }
-
+    
+    
     return (
       <div className="post">   
   
@@ -116,14 +73,15 @@ import { AuthContext } from "../../context/AuthContext.jsx";
   
      <PostIcons 
      OpenComment={OpenComment} 
-     data={data}
-     likeActions={likeActions}
-     saveActions={saveActions}
+     outerActions={OuterActions}
+     postId={data._id}
+     postIconsContext={{postIconsState,postIconsDispatch}}
+     isOverlay={false}
      />
   
       <div className="post-info">
           <div className="all-likes">
-             <p>{postState.likes} likes</p>
+             <p>{postState.likes.length} likes</p>
           </div>
           {postState.comments!==0 &&
           <div 
@@ -147,7 +105,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
          isInitialSubmitBtnHidden:true
       }}
       postId={data.id}     
-      addPostComment={actions.addOuterComment} 
+      addOuterComment={OuterActions.addOuterComment} 
         />}
       </div>
   

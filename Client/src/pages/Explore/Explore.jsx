@@ -6,7 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 import usePost from "../../hooks/serviceHooks/usePosts.jsx";
 import useErrorBoundary from "../../hooks/UseErrorBoundary.jsx";
 import isBadRequest from "../../utils/errorHandler.js";
-import { setOuterData } from "../../utils/util.jsx";
+import { OuterBuilder } from "../../utils/Outer.jsx";
+// import {  } from "../../utils/Outer.jsx";
 
 
 export default function Explore() {
@@ -69,7 +70,6 @@ function ExploreBody({overlayDispatch}) {
           overlayDispatch={overlayDispatch}
           data={posts[i]}
           key={posts[i].id} 
-          setOuterData={setOuterData(setPostsData)}
           />
         </ExploreRow>
         )
@@ -80,7 +80,6 @@ function ExploreBody({overlayDispatch}) {
          <ExplorePostBox 
          data={postsData[i]} 
          overlayDispatch={overlayDispatch}
-         setOuterData={setOuterData(setPostsData)}
           key={posts[i].id}
          />
         )
@@ -121,29 +120,33 @@ function ExploreRow({ children }) {
   )
 }
 
-function ExplorePostBox({ overlayDispatch, data , setOuterData }) {
+function ExplorePostBox({ overlayDispatch, data }) {
+  
+  const [explorePostData,setExplorePostData] = useState(data);
+  const outerActions = OuterBuilder(setExplorePostData);
+  delete outerActions.removeOuterSave;
 
   return (
     <div className="explore-box">
       <div className="box-in"
         onClick={(e) => {
-          history.pushState({},'',`/p/${data.id}`);
+          history.pushState({},'',`/p/${explorePostData.id}`);
           overlayDispatch({
             typeAction: overlayConstants.OPEN,
-            component: Comments(data.id,setOuterData,overlayDispatch),
+            component: Comments(explorePostData.id,outerActions),
             typeOverlay: 'Modal'
           });
         }}
       >
-        <img src={data.postImage} alt="" />
+        <img src={explorePostData.postImage} alt="" />
         <div className="explore-box-stats">
           <div className="explore-box-likes">
             <i className="fa-regular fa-heart"></i>
-            {data.likes.length}
+            {explorePostData.likes.length}
           </div>
           <div className="explore-box-comments">
             <i className="fa-regular fa-comment"></i>
-           {data.comments || 0}
+           {explorePostData.comments || 0}
           </div>
         </div>
       </div>

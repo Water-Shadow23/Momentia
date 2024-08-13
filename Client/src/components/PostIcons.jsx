@@ -1,36 +1,39 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import usePost from "../hooks/serviceHooks/usePosts.jsx";
 import isBadRequest from "../utils/errorHandler.js";
 import useErrorBoundary from "../hooks/UseErrorBoundary.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { authConstants, errorConstants } from "../constants/dispatchConstants.js";
+import { authConstants, errorConstants, postIconsConstants } from "../constants/dispatchConstants.js";
 import { useNavigate } from "react-router-dom";
 
 
 
-export default function PostIcons({OpenComment,likeActions,saveActions,data}){
+export default function PostIcons({OpenComment,
+  outerActions,postId,iconsUpperState,
+  postIconsContext,isOverlay
+}){
+     
+
     const {authState} = useContext(AuthContext);
     const {errorDispatch} = useErrorBoundary();
     const navigate = useNavigate();
-    const [isLiked,setIsLiked] = useState(()=>{
-      const WeLiked = likeActions.isLiked || data.likes.includes(authState.userId);
-      if(WeLiked){
-       return true;
-      }else{
-        return false;
-      } 
-    });
-    const [isSaved,setIsSaved] = useState(()=>{
-      const WeSaved = likeActions.isSaved || authState.saved.includes(data._id);
-      if(WeSaved){
-       return true;
-      }else{
-        return false;
-      } 
-    });
-
+    
+    
     const {likePost,savePost,unlikePost,unsavePost} = usePost();
-
+    let isLiked;
+    let isSaved;
+    
+    if(postIconsContext){
+      isLiked = (!isOverlay && postIconsContext.postIconsState.isLiked) 
+     || ((isOverlay && iconsUpperState.iconsState.isLiked) ) 
+    
+      isSaved =  (!isOverlay && postIconsContext.postIconsState.isSaved) 
+     || ((isOverlay && iconsUpperState.iconsState.isSaved) ) 
+    }else{
+      isLiked = iconsUpperState.iconsState.isLiked
+      isSaved = iconsUpperState.iconsState.isSaved
+    }
+    
     return (
         <div className="icons-post-cont">
   
@@ -39,13 +42,33 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
           if(authState.isAuthenticated){
             try{
              if(!isLiked){
-              await likePost(data._id);
-              setIsLiked(true);
-              likeActions.addLikeOuter();
+              await likePost(postId);
+              if(postIconsContext){
+                postIconsContext.postIconsDispatch({
+                  typeAction:postIconsConstants.LIKE
+                })
+              }
+              if(iconsUpperState){
+                iconsUpperState.setIconsState(preState=>{
+                   preState.isLiked = true;
+                   return {...preState}
+                 }) 
+               }
+              outerActions.addOuterLike(authState.userId);
              }else{
-               await unlikePost(data._id);
-               setIsLiked(false);
-               likeActions.removeLikeOuter();
+               await unlikePost(postId);
+               if(postIconsContext){
+                 postIconsContext.postIconsDispatch({
+                  typeAction:postIconsConstants.UNLIKE
+                })
+               }
+              if(iconsUpperState){
+                iconsUpperState.setIconsState(preState=>{
+                   preState.isLiked = false;
+                   return {...preState}
+                 }) 
+               }
+               outerActions.removeOuterLike(authState.userId);
              }
  
             }catch(err){
@@ -56,7 +79,9 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
           }
         }}
         >
-          <i className={`fa-regular fa-heart icon icon-post ${isLiked && 'liked'}`}></i>
+          <i className={`fa-regular fa-heart icon icon-post 
+          ${isLiked && 'liked'}`}></i>
+
         </div>
         <div className="icon-cont" 
         onClick={()=>{
@@ -70,21 +95,45 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
         >
           <i className="fa-regular fa-comment icon icon-post"></i>
         </div>
-        <div className="icon-cont" onClick={async ()=>{
+        <div className="icon-cont" 
+
+        >
+          <i onClick={async ()=>{
           if(authState.isAuthenticated){
            try{
             if(!isSaved){
 
-              await savePost(data._id);
-              authState.saved.push(data._id);
-              setIsSaved(true);
-             }else{
-               await unsavePost(data._id);
-               if(saveActions.removeOuterSave){
-                saveActions.removeOuterSave(data._id);
+              await savePost(postId);
+              authState.saved.push(postId);
+               if(iconsUpperState){
+                iconsUpperState.setIconsState(preState=>{
+                   preState.isSaved = true;
+                   return {...preState}
+                 }) 
                }
-               authState.saved = authState.saved.filter(id=>id!==data._id)
-               setIsSaved(false);
+              if(postIconsContext){
+                postIconsContext.postIconsDispatch({
+                  typeAction:postIconsConstants.SAVE
+                })
+              } 
+              
+             }else{
+               await unsavePost(postId);     
+               authState.saved = authState.saved.filter(id=>id!==postId)
+               if(iconsUpperState){
+                iconsUpperState.setIconsState(preState=>{
+                   preState.isSaved = false;
+                   return {...preState}
+                 }) 
+                }
+                if(postIconsContext){
+                  postIconsContext.postIconsDispatch({
+                    typeAction:postIconsConstants.UNSAVE
+                  })
+                }
+              
+                  outerActions.removeOuterSave()
+                
              }
            }catch(err){
            
@@ -92,10 +141,8 @@ export default function PostIcons({OpenComment,likeActions,saveActions,data}){
           }else{
             navigate('/login');
           }
-        }}
-
-        >
-          <i className={`fa-regular fa-bookmark icon icon-post  
+        }} 
+          className={`fa-regular fa-bookmark icon icon-post  
           ${isSaved && 'saved'}`}></i>
         </div>
   
