@@ -4,13 +4,14 @@ import { useContext, useEffect, useState } from 'react';
 import EditForm from './Form/EditForm.jsx';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import { useUser } from '../../hooks/serviceHooks/useUser.jsx';
+import { authConstants } from '../../constants/dispatchConstants.js';
 
 
 export default function ProfileEdit() {
      
     //instead of directly changing the photo , add overlay and do it from there
     
-    const {authState} = useContext(AuthContext);
+    const {authState,authDispatch} = useContext(AuthContext);
     const [imagePreviewUrl,setImageUploadState,processFile] = useImageUpload()
     const [imageUrl,setImageUrl] = useState('');
     const [profileData,setProfileData] = useState();
@@ -27,8 +28,12 @@ export default function ProfileEdit() {
        await edit({
         profilePhoto:imageUrl
        });
+       authDispatch({
+        typeAction:authConstants.SET_AUTH,
+        profilePhoto:imageUrl
+       })
       }catch(err){
-
+        
       }
     }
 

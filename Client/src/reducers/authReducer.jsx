@@ -10,10 +10,10 @@ export function authReducer(state,action){
   case 'setAuth':
    return {
     isAuthenticated:true,
-    userId:action.userId,
-    authKey:action.authKey,
-    profilePhoto:action.profilePhoto,
-    saved:action.saved
+    userId:action.userId || state.userId,
+    authKey:action.authKey || state.authKey,
+    profilePhoto:action.profilePhoto || state.profilePhoto,
+    saved:action.saved || state.saved
    }
   case 'clearAuth':
    return {
