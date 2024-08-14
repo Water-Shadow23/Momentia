@@ -77,5 +77,6 @@
 
 .explore .explore-box{
     min-height: 10rem;
-    max-height: 20rem;
+    /* max-height: 20rem; */
+    height: 18rem;
 }
