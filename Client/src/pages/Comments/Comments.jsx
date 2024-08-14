@@ -135,7 +135,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
         <>
        {postData ? 
        <div className="comments-cont" >
-         <div className="comments-in" id="modal-cont" data-navigate={-1}>
+         <div className="comments-in" id={overlayDispatch ? 'modal-cont' : ''} data-navigate={-1}>
     
        <div className="comments-img-cont">
            <img className="comments-img" src={postData.postImage} alt="" />
