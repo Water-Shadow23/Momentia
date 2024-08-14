@@ -25,8 +25,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
       const isAuthor = useRef(false);
 
       const [iconsState,setIconsState] = useState();
-
-      const isOverlay = isOpen ? true : false;
+      
 
       useEffect(()=>{
         (async function(){
@@ -130,7 +129,8 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
       }
 
       
-    
+      const commentFormRef = useRef(null);
+      
       return (
         <>
        {postData ? 
@@ -178,7 +178,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
             caption:postData.caption
            }} 
            overlayDispatch={overlayDispatch}
-           type={isOverlay && 'overlay'}
+           type={isOpen && 'overlay'}
            /> 
            }
            {postData.comments.map(commentData=>{
@@ -192,7 +192,8 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
               editComment
             }}
             overlayDispatch={overlayDispatch}
-            type={isOverlay && 'overlay'}
+            type={isOpen && 'overlay'}
+            commentFormRef={commentFormRef}
             />
            })}
              
@@ -221,7 +222,12 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
                </div>
     
                <div className="add-comment">
-                   <CommentForm addComment={addComment} postId={postData.id} />
+                   <CommentForm 
+                   addComment={addComment}
+                   editComment={editComment} 
+                   postId={postData.id} 
+                   ref={commentFormRef}
+                   />
                </div>
     
            </div>

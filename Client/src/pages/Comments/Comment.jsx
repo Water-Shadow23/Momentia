@@ -1,12 +1,18 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import usePostDetail from "../../hooks/serviceHooks/usePostDetail.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { overlayConstants } from "../../constants/dispatchConstants.js";
 
 
-
-export function Comment({data,likeActions,commentActions,overlayDispatch,type}){
+export function Comment({
+  data,
+  likeActions,
+  commentActions,
+  overlayDispatch,
+  type,
+  commentFormRef
+}){
     const {authState} = useContext(AuthContext);
 
     const [isLiked,setIsLiked] = useState(()=>{
@@ -23,8 +29,8 @@ export function Comment({data,likeActions,commentActions,overlayDispatch,type}){
     const {terminateComment} = usePostDetail();
     
     const {likeComment,unlikeComment} = usePostDetail();
-    const navigate = useNavigate();
-    
+   
+   
     
     return (
         <div className="comment">
@@ -73,25 +79,38 @@ export function Comment({data,likeActions,commentActions,overlayDispatch,type}){
          </div>
           {isAuthor &&
           <>
+          <div className="comment-actions" >
           <div className="comment-edit"
           onClick={async ()=>{
-          
+            const {comId} = commentFormRef.current.formState();
+           
+            if(comId!==data._id){
+              commentFormRef.current.convertToEditForm(data.content,data._id);
+            }
           }}
           >
            <p className="comment-option">edit</p>
           </div>
           <div className="comment-delete" 
           onClick={async ()=>{
+            const {comId} = commentFormRef.current.formState();
            try{
             commentActions.removeComment(data._id);
            await terminateComment(data.post,data._id);
-          
+
+           if(comId===data._id){
+            commentFormRef.current.convertToCreateForm();
+          }
+
+         
            }catch(err){
             console.error(err);
            }
           }}
           >
            <p className="comment-option">delete</p>
+          </div>
+
           </div>
           </>
           }

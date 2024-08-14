@@ -66,6 +66,7 @@
 .comments-cont .add-comment{
  padding: 1rem;
  border-top: 1px solid var(--border-clr-grey);
+ position: relative;
 
 }
 .comments-cont .icons-post-cont{
@@ -187,4 +188,31 @@
 }
 .close-popup-cross i{
     cursor: pointer;
+}
+
+.comments-cont .post-btn-group{
+    display: flex;
+    flex-direction: row;
+    flex: 0;
+    align-items: center;
+    gap: .5rem;
+}
+
+.comments-form input[name='content']{
+    min-width: 3.5rem;
+}
+
+.cancel-btn{
+   font-size: var(--fs-medium-big); 
+   background-color: transparent;
+   color: rgb(166, 162, 162);
+   cursor: pointer;
+}
+.cancel-btn:active{
+    color: rgb(142, 138, 138);
+}
+
+.comment-actions{
+    display: flex;
+    gap: .5rem;
 }
