@@ -310,6 +310,8 @@ function ProfilePost({ data  , overlayDispatch , removeOuterSave }) {
    const outerActions = OuterBuilder(setProfilePostData)
    if(removeOuterSave){
      outerActions.removeOuterSave = removeOuterSave
+   }else{
+    delete outerActions.removeOuterSave;
    }
 
     return (
