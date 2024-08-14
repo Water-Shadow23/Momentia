@@ -14,7 +14,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
     
    export default function Comments (postId,outerActions,postIconsContext){
 
-     return function({overlayDispatch}){
+     return function({overlayDispatch,isOpen}){
 
         const {getPostData} = usePost();
         const {getComments} = usePostDetail();
@@ -24,7 +24,9 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
       const {authState} = useContext(AuthContext);
       const isAuthor = useRef(false);
 
-      const [iconsState,setIconsState] = useState()
+      const [iconsState,setIconsState] = useState();
+
+      const isOverlay = isOpen ? true : false;
 
       useEffect(()=>{
         (async function(){
@@ -127,7 +129,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
         });
       }
 
-      const inputRef = useRef();
+      
     
       return (
         <>
@@ -176,6 +178,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
             caption:postData.caption
            }} 
            overlayDispatch={overlayDispatch}
+           type={isOverlay && 'overlay'}
            /> 
            }
            {postData.comments.map(commentData=>{
@@ -189,6 +192,7 @@ import { OuterBuilder } from "../../utils/Outer.jsx";
               editComment
             }}
             overlayDispatch={overlayDispatch}
+            type={isOverlay && 'overlay'}
             />
            })}
              

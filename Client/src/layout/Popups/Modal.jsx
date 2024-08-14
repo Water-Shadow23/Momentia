@@ -13,6 +13,7 @@ export default function Modal({isOpen,ComponentToRender,overlayDispatch}){
              {ComponentToRender ? 
              <ComponentToRender
              overlayDispatch={overlayDispatch}
+             isOpen={isOpen}
              /> : ''}
 
              <div className="close-popup-cross" 
