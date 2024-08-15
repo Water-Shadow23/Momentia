@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
 
-   const { authState } = useContext(AuthContext);
+   const { authState,isAuthStateLoaded } = useContext(AuthContext);
 
    return (
       <>
@@ -14,14 +14,14 @@ export default function Home() {
             <div className="home-sub home-content">
                <div className="variant-cont">
                   <div className="variant">
-                     {authState.isAuthenticated
+                     {authState.isAuthenticated 
                         ?
                         <p>Following</p>
                         :
                         <p>For you</p>
                      }
                   </div>
-                  {!authState.isAuthenticated && 
+                  {(!authState.isAuthenticated && isAuthStateLoaded) && 
                   <div className="auth-btns">
                         <Link to='/login' className="auth-btn aqua-btn blue">Login</Link>
                         <Link to='/register' className="auth-btn blue">Register</Link>

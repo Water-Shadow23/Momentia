@@ -33,7 +33,7 @@ export default function usePersistedAuthState(){
               if(err.type === 'externalFail'){
                if(err.code === 401){
                 removeCookies('token');
-                navigate('/login');
+                navigate('/login',{replace:true});
                }
               } 
               else if(err.type === 'internalFail'){

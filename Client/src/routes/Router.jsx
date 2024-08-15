@@ -15,6 +15,7 @@ import PersistedAuthState from "../components/PersistedAuthState.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import PostDetail from "../pages/Comments/PostDetail.jsx";
+import AuthGuard from "../components/AuthGuard.jsx";
 
 
 
@@ -28,47 +29,110 @@ export default function Router() {
            <Route element={<PersistedAuthState />}>
             <Route element={<Main />}>
               
-             <Route path='/' element={<ErrorBoundary> <Home /> </ErrorBoundary>} />
-             
-             {authState.isAuthenticated &&
-             <Route path='/u/:userId' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
+             <Route path='/' 
+            element=
+            {         
+             <ErrorBoundary> 
+              <Home /> 
+            </ErrorBoundary>         
+            } />
+            
+
+             <Route path='/u/:userId' 
+             element=
+             {
+            <AuthGuard access={['u']}> 
+             <ErrorBoundary> 
+              <Profile /> 
+             </ErrorBoundary>
+             </AuthGuard>
+             } 
+             >
                 <Route path="" element={<ErrorBoundary> <UserPosts /> </ErrorBoundary>} />
+
              </Route>
-             }
-
-            {authState.isAuthenticated &&
-             <Route path='/p/:id' element={<ErrorBoundary> <PostDetail /> </ErrorBoundary>} />
-            }
              
-            {authState.isAuthenticated && 
-             <Route path='/explore' element={<ErrorBoundary> <Explore /> </ErrorBoundary>} />
-            }
+             <Route path='/p/:id' 
+             element=
+            {
+              <AuthGuard access={['u']}> 
+              <ErrorBoundary> 
+              <PostDetail /> 
+             </ErrorBoundary>
+             </AuthGuard>
+            } />             
+           
+             <Route path='/explore' 
+             element=
+             {
+            <AuthGuard access={['u']}> 
+             <ErrorBoundary>
+               <Explore /> 
+             </ErrorBoundary>
+             </AuthGuard>
+            } />
+             
+             <Route path='/accaunts' 
+             element=
+            {
+              <AuthGuard access={['u']}> 
+              <ErrorBoundary>
+               <Profile /> 
+             </ErrorBoundary>
+             </AuthGuard>
+            } >
 
-             {authState.isAuthenticated && 
-             <Route path='/accaunts' element={<ErrorBoundary> <Profile /> </ErrorBoundary>} >
-                 <Route path="" element={<ProfileOwnPosts />} />
-                 <Route path="saved" element={<ProfileSavedPosts />} />
+             <Route path="" element={<ErrorBoundary> <ProfileOwnPosts /> </ErrorBoundary>} />
+             <Route path="saved" element={<ErrorBoundary> <ProfileSavedPosts /> </ErrorBoundary>} />
+             
              </Route>
-             }
+             
 
-             {authState.isAuthenticated && 
-             <Route path='/accaunts/edit' element={<ErrorBoundary> <ProfileEdit /> </ErrorBoundary>} />
-             }
+           
+             <Route path='/accaunts/edit' 
+             element=
+            {
+              <AuthGuard access={['u']}> 
+              <ErrorBoundary>
+               <ProfileEdit />
+              </ErrorBoundary>
+              </AuthGuard>
+            } />
              
-             
-             <Route path="*" element={<NotFound />} />
-                        
+                         
             </Route>
+            
 
-            {authState.isAuthenticated===false  ?
-            <Route element={<Auth />}>
-             <Route path="/login" element={<ErrorBoundary> <Login /> </ErrorBoundary>} />
+            <Route 
+              element={
+              <AuthGuard access={['g']}> 
+              <Auth />
+              </AuthGuard>
+              }
+            >
+
+             <Route path="/login" 
+             element=
+             {
+              <ErrorBoundary> 
+              <Login /> 
+             </ErrorBoundary>
+             } />
              
-             <Route path="/register" element={<ErrorBoundary> <Register /> </ErrorBoundary>} />
+             <Route path="/register"
+              element=
+             {
+              <ErrorBoundary>
+               <Register />
+              </ErrorBoundary>
+             } />
               
             </Route>
-            : '' 
-            }
+
+           
+           
+            <Route path="*" element={<NotFound />} />
+
            </Route>  
 
           </Routes>
