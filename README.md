@@ -75,6 +75,8 @@ Client
 - **🔖⭐️ Save Post:** Add posts to saved posts section in your profile.
 - **➕ Create comments:** Add comments to a post you desire
 - **❤️ Like/Unlike comments** 
+- **🗑️ Delete comments**  
+- **✏️ Edit comments**  
 
 ## ⚠️ Warning
 The application uses fontawesome for icons so it may not load with my **kit** when you run it.   
