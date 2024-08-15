@@ -125,7 +125,7 @@ const commentSchema = z.object({
         }}
         />
 
-        <i class="fa-solid fa-xmark cancel-btn" 
+        <i className="fa-solid fa-xmark cancel-btn" 
         ref={cancelRef}
         style={{
           display:'none'
