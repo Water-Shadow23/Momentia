@@ -17,7 +17,7 @@ export  function ProfilePostsBody() {
     const params = useParams();
     const UserIsUs = !params.hasOwnProperty('userId'); 
     const userId = params.userId;
-    
+
 
     const {authState} = useContext(AuthContext);
     const [activeTab, setActive] = useTabs(tabs);
@@ -107,7 +107,8 @@ export  function ProfilePostsBody() {
                <Outlet 
                context={{
                    postsData:posts,
-                   removeOuterSave
+                   removeOuterSave,
+                  
                 }}
                 />
             </div>
@@ -196,6 +197,7 @@ export function ProfileSavedPosts() {
 export function ProfileOwnPosts() {
     const {postsData} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
+    
     let [postCont,setPostCont] = useState({
       status:'initial',
       data:[]
@@ -257,7 +259,7 @@ export function ProfileOwnPosts() {
         postCont.data
        ) 
       }else{
-       return <NoPosts />
+       return <NoPosts overlayDispatch={overlayDispatch}/>
       }
      }
    }
