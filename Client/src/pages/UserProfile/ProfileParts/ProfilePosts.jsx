@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, Outlet, useLocation, useOutletContext, useParams } from "react-router-dom";
 import { UseOverlay } from "../../../hooks/useOverlay.jsx";
 import Comments from "../../Comments/Comments.jsx";
 import useTabs from "../../../hooks/useTabs.jsx";
@@ -21,16 +21,29 @@ export  function ProfilePostsBody() {
 
     const {authState} = useContext(AuthContext);
     const [activeTab, setActive] = useTabs(tabs);
-    const [posts,setPosts] = useState();
+    let [posts,setPosts] = useState();
     const {getOwnPosts,getSavedPosts,getUserPosts} = useUser();
 
     const outerActions = OuterBuilder(setPosts);
     const removeOuterSave = outerActions.removeOuterSave;
 
-    useEffect(()=>{
-     if(authState.isAuthenticated){
+    useEffect(()=>{  
+    if(authState.isAuthenticated){
+      
+      //check whether a tab location has changed
+      //abstract this into its own method in useTabs hook in future
+      if((activeTab.key==='saved' 
+        && activeTab.location!=='/accaunts/saved')
+       ||
+       (activeTab.key==='posts' 
+        && activeTab.location!=='/accaunts')
+      ){
+        setPosts(null)
+      }
+
        if(UserIsUs) {
          if(activeTab.key === 'posts' && activeTab.location === '/accaunts'){
+          
            (async function(){
              try{
              const posts =  await getOwnPosts();
@@ -43,7 +56,8 @@ export  function ProfilePostsBody() {
            })(); 
          }
          else if(activeTab.key === 'saved' && activeTab.location === '/accaunts/saved'){
-           (async function(){
+
+          (async function(){
              try{
              const posts = await getSavedPosts();
              setPosts(()=>{
@@ -67,13 +81,16 @@ export  function ProfilePostsBody() {
           }
         })(); 
        }
-     }   
+      
+     
+    }
+   
     },[activeTab,authState])
  
 
     return (
       <>
-      {posts &&
+        
         <div className="profile-posts-cont">
 
             <div className="profile-posts-head">
@@ -84,7 +101,7 @@ export  function ProfilePostsBody() {
                 setActive={setActive}
                 /> 
             </div>
-
+            
             <div className="profile-posts-body">
              
                <Outlet 
@@ -96,7 +113,7 @@ export  function ProfilePostsBody() {
             </div>
 
         </div>
-              }
+         
       </>
     )
 }
@@ -104,11 +121,17 @@ export  function ProfilePostsBody() {
 export function ProfileSavedPosts() {
     const {postsData,removeOuterSave} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
-    let [postCont,setPostCont] = useState([]); 
+    let [postCont,setPostCont] = useState({
+      status:'initial',
+      data:[]
+    });
+   
+    //useEffect for putting the records into rows
+    //abstract this into its own hook in future
     useEffect(()=>{
         
-        if(postCont.length){
-            postCont = [];
+        if(postCont.data.length){
+            postCont.data = [];
         }
 
         if(postsData?.length){
@@ -116,7 +139,7 @@ export function ProfileSavedPosts() {
     
           for(let i = 0 ; i<postsData.length;i++){
            if(i%3 === 0){
-            postCont.push(
+            postCont.data.push(
             <ProfilePostRow key={i}>
               <ProfilePost
               overlayDispatch={overlayDispatch}
@@ -127,7 +150,7 @@ export function ProfileSavedPosts() {
             </ProfilePostRow>
             )
            }else{
-            const lastElement = postCont[postCont.length-1];
+            const lastElement = postCont.data[postCont.data.length-1];
             const newChildren = React.Children.toArray(lastElement.props.children);
             newChildren.push(
              <ProfilePost 
@@ -138,7 +161,7 @@ export function ProfileSavedPosts() {
              />
             )
     
-            postCont[postCont.length-1] = React.cloneElement(
+            postCont.data[postCont.data.length-1] = React.cloneElement(
               lastElement,
               {key:lastElement.key},
               ...newChildren
@@ -149,40 +172,46 @@ export function ProfileSavedPosts() {
     
         }
     
-        setPostCont(()=>[...postCont]);
+        setPostCont(()=>({
+          ...postCont,
+          status:'fulfilled'
+        }));
     
        },[postsData]) 
 
-    return (
-        <>
-         {postsData ? 
-          postCont.length ? 
-          postCont 
-          :
-          <NoSaved /> 
-        
-        :
-        '' 
+
+       if(postsData){
+        if(postCont.status==='fulfilled'){
+         if(postCont.data.length){
+          return (
+           postCont.data
+          ) 
+         }else{
+          return <NoSaved />
+         }
         }
-        </>
-    )
+      }
 }
 
 export function ProfileOwnPosts() {
     const {postsData} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
-    let [postCont,setPostCont] = useState([]); 
+    let [postCont,setPostCont] = useState({
+      status:'initial',
+      data:[]
+    }); 
+
     useEffect(()=>{
         
-        if(postCont.length){
-            postCont = [];
+        if(postCont.data.length){
+            postCont.data = [];
         }
+
         if(postsData?.length){
-            
-    
+               
           for(let i = 0 ; i<postsData.length;i++){
            if(i%3 === 0){
-            postCont.push(
+            postCont.data.push(
             <ProfilePostRow key={i}>
               <ProfilePost
               overlayDispatch={overlayDispatch}
@@ -192,7 +221,7 @@ export function ProfileOwnPosts() {
             </ProfilePostRow>
             )
            }else{
-            const lastElement = postCont[postCont.length-1];
+            const lastElement = postCont.data[postCont.data.length-1];
             const newChildren = React.Children.toArray(lastElement.props.children);
             newChildren.push(
              <ProfilePost 
@@ -202,7 +231,7 @@ export function ProfileOwnPosts() {
              />
             )
     
-            postCont[postCont.length-1] = React.cloneElement(
+            postCont.data[postCont.data.length-1] = React.cloneElement(
               lastElement,
               {key:lastElement.key},
               ...newChildren
@@ -213,29 +242,33 @@ export function ProfileOwnPosts() {
     
         }
     
-        setPostCont(()=>[...postCont]);
+        setPostCont(()=>({
+         ...postCont,
+         status:'fulfilled'
+        }));
     
        },[postsData])
 
-    return (
-        <>
-        {postsData ? 
-          postCont.length ? 
-          postCont 
-          :
-          <NoPosts /> 
-        
-        :
-        '' 
-        }
-        </>
-    )
+    
+   if(postsData){
+     if(postCont.status==='fulfilled'){
+      if(postCont.data.length){
+       return (
+        postCont.data
+       ) 
+      }else{
+       return <NoPosts />
+      }
+     }
+   }
 }
+
 
 export function UserPosts(){
   const {postsData} = useOutletContext();
     const {overlayDispatch} = UseOverlay();
     let [postCont,setPostCont] = useState([]); 
+
     useEffect(()=>{
         
         if(postCont.length){
@@ -294,6 +327,7 @@ export function UserPosts(){
         </>
     )
 }
+
 
 function ProfilePostRow({ children }) {
 
