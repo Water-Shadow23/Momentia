@@ -29,7 +29,8 @@ async function login({username,password}){
     token,
     data:{
       saved:user.saved,
-      profilePhoto:user.profilePhoto
+      profilePhoto:user.profilePhoto,
+      username:user.username,
     },
     id:user._id
   };

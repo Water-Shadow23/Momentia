@@ -25,7 +25,8 @@ export default function usePersistedAuthState(){
                userId:accauntData.data._id,
                authKey:cookies.token,
                profilePhoto:accauntData.data.profilePhoto || '',
-               saved:accauntData.data.saved || [] 
+               saved:accauntData.data.saved || [] ,
+               username:accauntData.data.username
               });
                
              }catch(err){

@@ -22,7 +22,8 @@ export default function useAuth(){
       userId:resData.id,
       authKey:resData.token,
       profilePhoto:resData.data.profilePhoto || '',
-      saved:resData.data.saved || [] 
+      saved:resData.data.saved || [] ,
+      username:resData.data.username
     });
   }
  
@@ -34,7 +35,8 @@ export default function useAuth(){
       userId:resData.id,
       authKey:resData.token,
       profilePhoto:resData.data.profilePhoto || '',
-      saved:resData.data.saved || [] 
+      saved:resData.data.saved || [] ,
+      username:resData.data.username
     });
   }
 

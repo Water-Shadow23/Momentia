@@ -13,7 +13,8 @@ export function authReducer(state,action){
     userId:action.userId || state.userId,
     authKey:action.authKey || state.authKey,
     profilePhoto:action.profilePhoto || state.profilePhoto,
-    saved:action.saved || state.saved
+    saved:action.saved || state.saved,
+    username:action.username || state.username || ''
    }
   case 'clearAuth':
    return {
@@ -21,7 +22,8 @@ export function authReducer(state,action){
     userId:'',
     authKey:'',
     profilePhoto:'',
-    saved:[]
+    saved:[],
+    username:''
    } 
    default:
     return state;
